@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--text sizing-->
+    <dimen name="title">24sp</dimen>
+    <dimen name="commonText">16sp</dimen>
+
+    <!--editText-->
+
+
+    <!--buttons-->
+    <dimen name="sync_button_w">270dp</dimen>
+    <dimen name="sync_button_h">60dp</dimen>
+    <dimen name="standard_button">50sp</dimen>
+    <dimen name="long_button">120sp</dimen>
+    
+    <!--checkboxes-->
+    <dimen name="rightCheckBox_w">200dp</dimen>
+
+    <!--icons/drawable-->
+    <dimen name="standard_icon">50sp</dimen>
+    <dimen name="big_icon">60sp</dimen>
+    <dimen name="small_icon">40sp</dimen>
+
+    <!--numberPicker-->
+    <dimen name="numberPicker_w">100sp</dimen>
+    <dimen name="numberPicker_h">50sp</dimen>
+
+    <!--recycleView-->
+    <!--summary_recycleView-->
+    <dimen name="summary_recycleView_w">90dp</dimen>
+    <dimen name="summary_recycleView_h">280dp</dimen>
+
+    <!--layouts-->
+    <dimen name="bandInfo_layout">150dp</dimen>
+    <!--numberPicker_layout-->
+    <dimen name="food_numberPicker">290dp</dimen>
+
+</resources>

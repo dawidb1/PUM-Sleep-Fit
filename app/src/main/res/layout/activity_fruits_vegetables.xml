@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.dawid.projectpum.FruitsVegetables">
+
+    <TextView
+        android:id="@+id/food_title"
+        android:text="@string/foodTitle"
+        android:textSize="@dimen/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="133dp"
+        android:layout_marginTop="15dp"
+        />
+
+    <RelativeLayout
+        android:id="@+id/food_numberPicker_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/food_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp">
+
+        <TextView
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="@string/vegetables"
+            android:textSize="@dimen/title" />
+
+        <com.shawnlin.numberpicker.NumberPicker
+            android:id="@+id/vegetables_numberPicker"
+            android:layout_marginRight="10dp"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            app:np_dividerColor="@color/colorPrimary"
+            app:np_max="8"
+            app:np_min="0"
+            app:np_orientation="horizontal"
+            app:np_selectedTextColor="@color/colorPrimary"
+            app:np_textColor="@color/colorPrimary"
+            app:np_value="0" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/fruit_numberPicker_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/food_numberPicker_layout"
+        android:layout_below="@+id/food_numberPicker_layout"
+        android:layout_marginTop="11dp">
+
+        <TextView
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="@string/fruits"
+            android:textSize="@dimen/title" />
+
+        <com.shawnlin.numberpicker.NumberPicker
+            android:id="@+id/food_numberPicker"
+            android:layout_marginRight="10dp"
+            android:layout_width="@dimen/numberPicker_w"
+            android:layout_height="@dimen/numberPicker_h"
+            android:layout_alignParentEnd="true"
+            app:np_dividerColor="@color/colorPrimary"
+            app:np_max="8"
+            app:np_min="0"
+            app:np_orientation="horizontal"
+            app:np_selectedTextColor="@color/colorPrimary"
+            app:np_textColor="@color/colorPrimary"
+            app:np_value="0" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/liquids_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/food_title"
+        android:layout_below="@+id/fruit_numberPicker_layout"
+        android:layout_marginTop="13dp"
+        android:text="@string/liquidsTitle"
+        android:textSize="@dimen/title" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/liquids_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@+id/liquids_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp">
+    </android.support.v7.widget.RecyclerView>
+
+    <Button
+        android:id="@+id/next_button"
+        android:layout_width="@dimen/standard_icon"
+        android:layout_height="@dimen/standard_icon"
+        android:background="@drawable/ic_arrow_forward"
+        android:gravity="center|bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="20dp"
+        />
+
+
+</RelativeLayout>

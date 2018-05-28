@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.dawid.projectpum.SetupSportActivities">
+    <TextView
+        android:text="@string/chooseActivitiesPreferencesTitle"
+        android:textSize="25dp"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="15sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/sportActivity_recycle_view"
+        android:layout_width="350sp"
+        android:layout_height="350sp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+    </android.support.v7.widget.RecyclerView>
+
+    <Button
+        android:id="@+id/next_button"
+        android:layout_width="@dimen/standard_button"
+        android:layout_height="@dimen/standard_button"
+        android:background="@drawable/ic_arrow_forward"
+        android:gravity="center|bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="20dp"
+        />
+</RelativeLayout>

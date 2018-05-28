@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.dawid.projectpum.DayInfo">
+
+    <TextView
+        android:id="@+id/aboutDay_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:text="@string/aboutDayTitle"
+        android:textSize="@dimen/title" />
+
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="90dp"
+        android:layout_below="@+id/aboutDay_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="33dp"
+        android:id="@+id/relativeLayout">
+<RadioGroup
+    android:id="@+id/radioGroup"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:id="@+id/linearLayout3">
+        <Button
+            android:id="@+id/mood_button"
+            android:background="@drawable/ic_mood_black_24dp"
+            android:layout_width="@dimen/standard_icon"
+            android:layout_height="@dimen/standard_icon"
+            android:gravity="center"/>
+        <RadioButton
+            android:id="@+id/mood_radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/neutral_button"
+            android:layout_width="@dimen/standard_icon"
+            android:layout_height="@dimen/standard_icon"
+            android:background="@drawable/ic_sentiment_neutral_black_24dp"
+            android:gravity="center" />
+
+        <RadioButton
+            android:id="@+id/neutral_radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/linearLayout3"
+        android:layout_alignParentEnd="true"
+        android:gravity="center"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/mood_bad_button"
+            android:layout_width="@dimen/standard_icon"
+            android:layout_height="@dimen/standard_icon"
+            android:background="@drawable/ic_mood_bad_black_24dp"
+            android:gravity="center" />
+        <RadioButton
+            android:id="@+id/mood_bad_radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</RadioGroup>
+
+</RelativeLayout>
+
+    <TextView
+        android:id="@+id/energy_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relativeLayout2"
+        android:layout_alignEnd="@+id/aboutDay_title"
+        android:text="@string/energyTitle"
+        android:textSize="@dimen/title" />
+
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="90dp"
+        android:layout_alignStart="@+id/relativeLayout"
+        android:layout_centerVertical="true"
+        android:id="@+id/relativeLayout2">
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+                <Button
+                    android:id="@+id/min_energy_btn"
+                    android:layout_width="@dimen/big_icon"
+                    android:layout_height="@dimen/big_icon"
+                    android:layout_alignParentStart="true"
+                    android:text="@string/lowEnergy" />
+                <RadioButton
+                    android:id="@+id/min_energy_radiobtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+                <Button
+                    android:id="@+id/medium_energy_btn"
+                    android:text="@string/standardEnergy"
+                    android:layout_width="@dimen/big_icon"
+                    android:layout_height="@dimen/big_icon"
+                    android:layout_centerHorizontal="true" />
+                <RadioButton
+                    android:id="@+id/medium_energy_radiobtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+                <Button
+                    android:id="@+id/max_energy_btn"
+                    android:text="@string/bigEnergy"
+                    android:layout_width="@dimen/big_icon"
+                    android:layout_height="@dimen/big_icon"
+                    android:layout_alignParentEnd="true" />
+                <RadioButton
+                    android:id="@+id/max_energy_radiobtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </RadioGroup>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="@dimen/rightCheckBox_w"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/aboutDay_title"
+        android:layout_below="@+id/relativeLayout2"
+        android:layout_marginTop="46dp"
+        android:id="@+id/right_checkbox_layout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:text="@string/snoreText"
+            android:textSize="@dimen/title" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:textSize="@dimen/title" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/snoreInfo"
+        android:background="@drawable/ic_info_outline_black_24dp"
+        android:layout_width="@dimen/small_icon"
+        android:layout_height="@dimen/small_icon"
+        android:layout_alignStart="@+id/right_checkbox_layout"
+        android:layout_below="@+id/right_checkbox_layout" />
+
+    <Button
+        android:id="@+id/next_button"
+        android:layout_width="@dimen/standard_icon"
+        android:layout_height="@dimen/standard_icon"
+        android:background="@drawable/ic_arrow_forward"
+        android:gravity="center|bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="20dp"
+        />
+
+
+
+</RelativeLayout>

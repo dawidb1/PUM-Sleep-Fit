@@ -1,0 +1,93 @@
+<resources>
+    <string name="app_name">ProjectPUM</string>
+    <string name="API_key">442356513597-bhmjs4b3k97oedb2f7un32lpiqsimcn0.apps.googleusercontent.com</string>
+    <!--settings first use scenario start-->
+
+    <!--welcome activity start-->
+    <string name="welcomeText">Witaj!
+        Możesz tutaj zbierać swoje informacje o śnie. </string>
+    <string name="welcome2Text">Pomoże Ci to poznać Twoje dobre i złe nawyki oraz zrozumieć Twój orgaznizm.</string>
+    <string name="welcome3Text">Wypełniaj ankiety codziennie, tylko tak masz szansę zmiany!</string>
+    <!--welcome activity end-->
+
+    <!--connect band start-->
+    <string name="connectBandTitle">Podłącz opaskę</string>
+    <string name="connectBandButton">Połącz</string>
+    <!--connect band end-->
+
+    <!--choose activities start-->
+    <string name="chooseActivitiesPreferencesTitle">Wybierz swoje aktywności</string>
+    <!--choose activities start-->
+
+    <!--choose diet start-->
+    <string name="dietPreferencesTitle">Co pasuje do Twojej diety?</string>
+    <string name="liquidsPreferencesTitle">Jakie substancje lubisz?</string>
+    <!--choose diet start-->
+
+    <!--life & job about start    -->
+    <string name="jobAboutTitle">Jakie jest Twoje główne zajęcie</string>
+    <string name="lifeAboutTitle">Jaki jest Twój tryb życia</string>
+    <string name="workingHours">Czas pracy:</string>
+    <!--life & job about end-->
+
+    <!--settings first use scenario end-->
+
+    <!--common uses start-->
+    <!--sync band start-->
+    <string name="commonWelcomeTitle">Miło Cię widzieć :)</string>
+    <string name="syncButton">Synchronizuj</string>
+    <string name="repairButton">Popraw</string>
+    <string name="ok">OK</string>
+    <string name="disabled">Unavalible now</string>
+    <string name="pickTime">Ustaw</string>
+
+    <string name="fallAsleep">Czas zaśnięcia: </string>
+    <string name="wakeUp">Czas obudzenia: </string>
+    <string name="deepSleep">Ilość głębokiego snu:</string>
+    <!--sync band end-->
+
+    <!--general day info start-->
+    <string name="aboutDayTitle">Jaki był ten dzień?</string>
+    <string name="energyTitle">Ile miałeś energii?</string>
+    <string name="lowEnergy">0.1</string>
+    <string name="standardEnergy">100</string>
+    <string name="bigEnergy">1 mln</string>
+    <string name="snoreText">Drzemka?</string>
+
+    <string name="dialog_message">Zalecamy czas drzemki do 40 minut.
+        \n\nPrzez ten czas twój organizm zregeneruje się wystarczająco.
+        \n\nNie wejdziesz jednak w stan snu głębokiego, który może rozregulować twój cykl okołodobowy.</string>
+    <string name="dialog_title">Drzemka</string>
+    <!--general day info end-->
+
+    <!--activity info start-->
+    <string name="activityTitle">Aktywność</string>
+    <string name="physicalSubtitle">FIZYCZNA</string>
+    <string name="psychicalSubtitle">PSYCHICZNA</string>
+    <string name="activityType">typ</string>
+    <string name="intensity">intensywność</string>
+    <string name="activityTime">czas</string>
+    <!--activity info end-->
+
+    <!--Fruits and vegetables start-->
+    <string name="foodTitle">Jedzenie</string>
+    <string name="vegetables">WARZYWA</string>
+    <string name="fruits">OWOCE</string>
+    <string name="liquidsTitle">Substancje</string>
+
+    <!--Fruits and vegetables end-->
+
+    <!--summary start-->
+    <string name="summaryTitle">Wspaniale!</string>
+    <string name="rating">6.0/5</string>
+    <string name="exitButton">Wyjście</string>
+    <!--summary end-->
+
+    <!--common uses end-->
+
+    <!--dialogs-->
+    <string name="dialog_fire_missiles">Próba</string>
+    <string name="fire">Druga proba</string>
+    <string name="cancel">Cancel</string>
+
+</resources>
