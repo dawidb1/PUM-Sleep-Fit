@@ -24,17 +24,16 @@
         android:layout_below="@+id/welcome_title_textView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="14dp"
-        android:text="@string/syncButton"
-        android:enabled="false"/>
+        android:text="@string/syncButton"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/sync_button"
-        android:layout_below="@+id/sync_button"
-        android:layout_marginStart="12dp"
-        android:text="@string/disabled"
-        android:textStyle="italic" />
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignStart="@+id/sync_button"-->
+        <!--android:layout_below="@+id/sync_button"-->
+        <!--android:layout_marginStart="12dp"-->
+        <!--android:text="@string/disabled"-->
+        <!--android:textStyle="italic" />-->
 
     <TextView
         android:id="@+id/ok_button"
@@ -43,20 +42,24 @@
         android:layout_alignEnd="@+id/sync_button"
         android:layout_below="@+id/sync_button"
         android:text="@string/ok"
-        android:textSize="@dimen/commonText" />
+        android:textSize="@dimen/commonText"
+        android:visibility="invisible"/>
 
     <LinearLayout
         android:id="@+id/dataView_LinearLayout"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/ok_button"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="16dp"
         android:orientation="vertical">
 
         <RelativeLayout
-            android:layout_marginVertical="30dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="@dimen/recyclerMargin">
 
             <TextView
                 android:id="@+id/textView6"
@@ -67,18 +70,6 @@
                 android:text="@string/fallAsleep"
                 android:textSize="@dimen/commonText" />
 
-            <!--<TextView-->
-            <!--android:id="@+id/start_time_text"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:text="00:00" />-->
-            <!--<EditText-->
-            <!--android:editable="false"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:layout_width="50dp"-->
-            <!--android:layout_height="30dp" />-->
             <Button
                 android:id="@+id/pickStartTime"
                 android:layout_width="80dp"
@@ -92,8 +83,10 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:layout_marginBottom="@dimen/recyclerMargin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+
             <TextView
                 android:id="@+id/textView7"
                 android:layout_width="wrap_content"
@@ -101,18 +94,7 @@
                 android:layout_centerVertical="true"
                 android:text="@string/wakeUp"
                 android:textSize="@dimen/commonText" />
-            <!--<EditText-->
-            <!--android:editable="false"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:layout_width="50dp"-->
-            <!--android:layout_height="30dp" />-->
-            <!--<TextView-->
-            <!--android:id="@+id/end_time_text"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:text="00:00"></TextView>-->
+
             <Button
                 android:id="@+id/pickEndTime"
                 android:layout_width="80dp"
@@ -125,27 +107,32 @@
 
         </RelativeLayout>
 
-        <!--<RelativeLayout-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content">-->
+        <RelativeLayout
+            android:layout_marginBottom="@dimen/recyclerMargin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/deepSleep"-->
-        <!--android:textSize="@dimen/commonText" />-->
-        <!--&lt;!&ndash;<EditText&ndash;&gt;-->
-        <!--&lt;!&ndash;android:editable="false"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_alignParentEnd="true"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_width="50dp"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_height="30dp" />&ndash;&gt;-->
-        <!--</RelativeLayout>-->
+            <TextView
+                android:id="@+id/StepCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/stepCounter"
+                android:textSize="@dimen/commonText" />
 
-        <!--<Button-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/repairButton"-->
-        <!--android:textSize="@dimen/commonText" />-->
+            <TextView
+                android:id="@+id/step_count"
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textSize="@dimen/bigText"
+                android:textColor="@android:color/holo_blue_dark"/>
+
+        </RelativeLayout>
     </LinearLayout>
 
     <Button

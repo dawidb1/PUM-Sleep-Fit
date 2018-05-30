@@ -44,6 +44,7 @@
     <string name="fallAsleep">Czas zaśnięcia: </string>
     <string name="wakeUp">Czas obudzenia: </string>
     <string name="deepSleep">Ilość głębokiego snu:</string>
+    <string name="stepCounter">Ilość kroków:</string>
     <!--sync band end-->
 
     <!--general day info start-->
