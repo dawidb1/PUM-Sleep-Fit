@@ -11,11 +11,14 @@ import com.example.dawid.projectpum.DAL.CheckboxesEnums;
 import com.example.dawid.projectpum.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Dawid on 23.04.2018.
@@ -24,10 +27,12 @@ import butterknife.ButterKnife;
 public class SportActivityAdapter extends RecyclerView.Adapter<SportActivityAdapter.ViewHolder> {
 
     public List<CheckboxesEnums.SportActivity> enumValues;
+    public ArrayList<Boolean> IsSelected;
     private Context context;
 
-    public SportActivityAdapter() {
+    public SportActivityAdapter(ArrayList<Boolean> isSelected) {
         enumValues = new ArrayList<CheckboxesEnums.SportActivity>(EnumSet.allOf(CheckboxesEnums.SportActivity.class));
+        IsSelected = isSelected;
     }
 
     @Override
@@ -41,6 +46,15 @@ public class SportActivityAdapter extends RecyclerView.Adapter<SportActivityAdap
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.setCheckBox(enumValues.get(position).getName());
+
+        if(IsSelected != null && IsSelected.size() != 0)
+        {
+            holder.check(IsSelected.get(position));
+        }
+        else {
+            IsSelected = new ArrayList<Boolean>(Arrays.asList(new Boolean[getItemCount()]));
+            Collections.fill(IsSelected, false);
+        }
     }
 
     @Override
@@ -54,6 +68,11 @@ public class SportActivityAdapter extends RecyclerView.Adapter<SportActivityAdap
             ButterKnife.bind(this,itemView);
         }
         private void setCheckBox(String text){this.checkBox.setText(text);}
+        private void check(Boolean bool){this.checkBox.setChecked(bool);}
+
+        @OnClick(R.id.checkbox) void doSth(){
+            IsSelected.set(getAdapterPosition(),this.checkBox.isChecked());
+        }
 
         @BindView(R.id.checkbox)
         CheckBox checkBox;

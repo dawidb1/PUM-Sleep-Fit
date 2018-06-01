@@ -11,11 +11,14 @@ import com.example.dawid.projectpum.DAL.CheckboxesEnums;
 import com.example.dawid.projectpum.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Dawid on 23.04.2018.
@@ -24,10 +27,12 @@ import butterknife.ButterKnife;
 public class LiquidsAdapter extends RecyclerView.Adapter<LiquidsAdapter.ViewHolder> {
 
     public List<CheckboxesEnums.Liquids> enumValues;
+    public ArrayList<Boolean> IsSelected;
     private Context context;
 
-    public LiquidsAdapter() {
-        enumValues = new ArrayList<CheckboxesEnums.Liquids>(EnumSet.allOf(CheckboxesEnums.Liquids.class));
+    public LiquidsAdapter(ArrayList<Boolean> isSelected) {
+        IsSelected = isSelected;
+        enumValues = new ArrayList<>(EnumSet.allOf(CheckboxesEnums.Liquids.class));
     }
 
     @Override
@@ -41,6 +46,14 @@ public class LiquidsAdapter extends RecyclerView.Adapter<LiquidsAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.setCheckBox(enumValues.get(position).getName());
+        if(IsSelected != null && IsSelected.size() != 0)
+        {
+            holder.check(IsSelected.get(position));
+        }
+        else {
+            IsSelected = new ArrayList<>(Arrays.asList(new Boolean[getItemCount()]));
+            Collections.fill(IsSelected, false);
+        }
     }
 
     @Override
@@ -54,6 +67,11 @@ public class LiquidsAdapter extends RecyclerView.Adapter<LiquidsAdapter.ViewHold
             ButterKnife.bind(this,itemView);
         }
         private void setCheckBox(String text){this.checkBox.setText(text);}
+        private void check(Boolean bool){this.checkBox.setChecked(bool);}
+
+        @OnClick(R.id.checkbox) void doSth(){
+            IsSelected.set(getAdapterPosition(),this.checkBox.isChecked());
+        }
 
         @BindView(R.id.checkbox)
         CheckBox checkBox;

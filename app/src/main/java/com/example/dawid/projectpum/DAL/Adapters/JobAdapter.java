@@ -11,6 +11,8 @@ import com.example.dawid.projectpum.DAL.CheckboxesEnums;
 import com.example.dawid.projectpum.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -25,10 +27,12 @@ import butterknife.OnClick;
 public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ViewHolder> {
 
     public List<CheckboxesEnums.Job> enumValues;
+    public ArrayList<Boolean> IsSelected;
     private Context context;
 
-    public JobAdapter() {
+    public JobAdapter(ArrayList<Boolean> isSelected) {
         enumValues = new ArrayList<CheckboxesEnums.Job>(EnumSet.allOf(CheckboxesEnums.Job.class));
+        IsSelected = isSelected;
     }
 
     @Override
@@ -42,6 +46,14 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.setCheckBox(enumValues.get(position).getName());
+        if(IsSelected != null && IsSelected.size() != 0)
+        {
+            holder.check(IsSelected.get(position));
+        }
+        else {
+            IsSelected = new ArrayList<Boolean>(Arrays.asList(new Boolean[getItemCount()]));
+            Collections.fill(IsSelected, false);
+        }
     }
 
     @Override
@@ -53,11 +65,13 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
-
-
         }
 
         private void setCheckBox(String text){this.checkBox.setText(text);}
+        private void check(Boolean bool){this.checkBox.setChecked(bool);}
+        @OnClick(R.id.checkbox) void doSth(){
+            IsSelected.set(getAdapterPosition(),this.checkBox.isChecked());
+        }
 
         @BindView(R.id.checkbox)
         CheckBox checkBox;

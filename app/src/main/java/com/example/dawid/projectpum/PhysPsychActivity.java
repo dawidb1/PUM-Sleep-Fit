@@ -165,10 +165,6 @@ public class PhysPsychActivity extends AppCompatActivity {
 //    endregion
 
 
-//    void AlerDialogHelper(String[] stringArray){
-//
-//    }
-
     @OnClick(R.id.next_button) void goNext(){
         Intent intent = new Intent(PhysPsychActivity.this,FruitsVegetables.class);
         startActivity(intent);

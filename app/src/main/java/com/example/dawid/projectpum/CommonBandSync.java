@@ -133,6 +133,10 @@ public class CommonBandSync extends AppCompatActivity {
         Intent intent = new Intent(CommonBandSync.this,DayInfo.class);
         startActivity(intent);
     }
+    @OnClick(R.id.setup) void firstUseSetup(){
+        Intent intent = new Intent(CommonBandSync.this,SetupSportActivities.class);
+        startActivity(intent);
+    }
 
     @OnClick(R.id.sync_button) void syncSteps(){
         readData();
