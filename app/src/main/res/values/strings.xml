@@ -62,7 +62,7 @@
     <!--general day info end-->
 
     <!--activity info start-->
-    <string name="activityTitle">Aktywność</string>
+    <string name="activityTitle">Aktywność FIZYCZNA</string>
     <string name="physicalSubtitle">FIZYCZNA</string>
     <string name="psychicalSubtitle">PSYCHICZNA</string>
     <string name="activityType">typ</string>

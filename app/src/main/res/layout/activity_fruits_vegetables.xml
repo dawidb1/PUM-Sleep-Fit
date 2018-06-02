@@ -10,7 +10,7 @@
     <TextView
         android:id="@+id/food_title"
         android:text="@string/foodTitle"
-        android:textSize="@dimen/title"
+        style="@style/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -91,7 +91,7 @@
         android:layout_below="@+id/fruit_numberPicker_layout"
         android:layout_marginTop="13dp"
         android:text="@string/liquidsTitle"
-        android:textSize="@dimen/title" />
+        style="@style/title"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/liquids_recyclerView"
@@ -102,16 +102,15 @@
         android:layout_marginTop="15dp">
     </android.support.v7.widget.RecyclerView>
 
-    <Button
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/next_button"
-        android:layout_width="@dimen/standard_icon"
-        android:layout_height="@dimen/standard_icon"
-        android:background="@drawable/ic_arrow_forward"
-        android:gravity="center|bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/ic_arrow_forward"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="20dp"
-        />
+        android:layout_alignParentRight="true"
+        android:layout_margin="20dp" />
 
 
 </RelativeLayout>

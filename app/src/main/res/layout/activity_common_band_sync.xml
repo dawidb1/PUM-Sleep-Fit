@@ -13,9 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="21dp"
+        android:layout_marginTop="@dimen/layout_margin"
         android:text="@string/commonWelcomeTitle"
-        android:textSize="@dimen/title" />
+        style="@style/title" />
 
     <Button
         android:id="@+id/sync_button"
@@ -23,7 +23,7 @@
         android:layout_height="@dimen/sync_button_h"
         android:layout_below="@+id/welcome_title_textView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="@dimen/layout_margin"
         android:text="@string/syncButton"/>
 
     <!--<TextView-->
@@ -35,23 +35,14 @@
         <!--android:text="@string/disabled"-->
         <!--android:textStyle="italic" />-->
 
-    <TextView
-        android:id="@+id/ok_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/sync_button"
-        android:layout_below="@+id/sync_button"
-        android:text="@string/ok"
-        android:textSize="@dimen/commonText"
-        android:visibility="invisible"/>
 
     <LinearLayout
         android:id="@+id/dataView_LinearLayout"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ok_button"
+        android:layout_below="@+id/sync_button"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/recyclerMargin"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -73,19 +64,21 @@
             <Button
                 android:id="@+id/pickStartTime"
                 android:layout_width="80dp"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
+                android:background="@color/secondaryDarkColor"
                 android:text="@string/pickTime"
                 android:textAllCaps="false"
+                android:textColor="@color/secondaryTextColor"
                 android:textSize="@dimen/commonText" />
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_marginBottom="@dimen/recyclerMargin"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/recyclerMargin">
 
             <TextView
                 android:id="@+id/textView7"
@@ -98,19 +91,21 @@
             <Button
                 android:id="@+id/pickEndTime"
                 android:layout_width="80dp"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
+                android:background="@color/secondaryLightColor"
                 android:text="@string/pickTime"
                 android:textAllCaps="false"
+                android:textColor="@color/secondaryTextColor"
                 android:textSize="@dimen/commonText" />
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_marginBottom="@dimen/recyclerMargin"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/recyclerMargin">
 
             <TextView
                 android:id="@+id/StepCounter"
@@ -129,30 +124,31 @@
                 android:gravity="center"
                 android:textAlignment="center"
                 android:textAllCaps="false"
-                android:textSize="@dimen/bigText"
-                android:textColor="@android:color/holo_blue_dark"/>
+                android:textColor="@android:color/holo_blue_dark"
+                android:textSize="@dimen/bigText" />
 
         </RelativeLayout>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/setup"
-        android:layout_width="@dimen/standard_icon"
-        android:layout_height="@dimen/standard_icon"
-        android:background="@drawable/ic_settings_black_24dp"
+    <android.support.design.widget.FloatingActionButton
+        app:backgroundTint="@color/primaryLightColor"
+        android:id="@+id/setup_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_settings_black_24dp"
         android:gravity="center|bottom"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_margin="20dp"/>
-    <Button
+        android:layout_margin="@dimen/footer_margin"/>
+
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/next_button"
-        android:layout_width="50sp"
-        android:layout_height="50sp"
-        android:background="@drawable/ic_arrow_forward"
-        android:gravity="center|bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/ic_arrow_forward"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_margin="20dp"
-        />
+        android:layout_margin="@dimen/footer_margin" />
 
 </RelativeLayout>

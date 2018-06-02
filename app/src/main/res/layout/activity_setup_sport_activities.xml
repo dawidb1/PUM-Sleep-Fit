@@ -7,7 +7,7 @@
     tools:context="com.example.dawid.projectpum.SetupSportActivities">
     <TextView
         android:text="@string/chooseActivitiesPreferencesTitle"
-        android:textSize="25dp"
+        style="@style/title"
         android:layout_centerHorizontal="true"
         android:layout_margin="15sp"
         android:layout_width="wrap_content"
@@ -23,14 +23,13 @@
         android:layout_centerVertical="true">
     </android.support.v7.widget.RecyclerView>
 
-    <Button
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/next_button"
-        android:layout_width="@dimen/standard_button"
-        android:layout_height="@dimen/standard_button"
-        android:background="@drawable/ic_arrow_forward"
-        android:gravity="center|bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/ic_arrow_forward"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="20dp"
-        />
+        android:layout_alignParentRight="true"
+        android:layout_margin="20dp" />
 </RelativeLayout>

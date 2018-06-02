@@ -24,7 +24,8 @@
             </intent-filter>
         </activity>
         <!--<activity android:name=".FindDevices" android:screenOrientation="portrait" />-->
-        <activity android:name=".Diet" android:screenOrientation="portrait" />
+        <activity android:name=".Diet" android:screenOrientation="portrait"
+            />
         <activity android:name=".JobLifeAbout" android:screenOrientation="portrait" />
         <activity android:name=".FruitsVegetables" android:screenOrientation="portrait" />
         <activity android:name=".CommonBandSync" android:screenOrientation="portrait" />
@@ -32,6 +33,10 @@
         <activity android:name=".DaySummary" android:screenOrientation="portrait" />
         <activity android:name=".PhysPsychActivity" android:screenOrientation="portrait" />
         <activity android:name=".SetupSportActivities" android:screenOrientation="portrait" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
     </application>
 

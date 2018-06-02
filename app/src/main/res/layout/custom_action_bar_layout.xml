@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <TableRow
+        android:gravity="center_vertical"
+        >
+
+        <TextView
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/raleway"
+            android:padding="10dp"
+            android:text="@string/app_name"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="@dimen/bigText" />
+        <ImageView
+            android:layout_alignParentRight="true"
+            android:id="@+id/action_bar_forward"
+            android:layout_width="@dimen/big_icon"
+            android:layout_height="@dimen/big_icon"
+            android:background="@android:color/transparent"
+            android:src="@drawable/owl_bar" />
+
+
+    </TableRow>
+</TableLayout>

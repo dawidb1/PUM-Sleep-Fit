@@ -12,9 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="23dp"
+        android:layout_marginTop="@dimen/layout_margin"
+        android:fontFamily="@font/cabin_sketch"
         android:text="@string/summaryTitle"
-        android:textSize="@dimen/title" />
+        android:textSize="@dimen/bigTitle"/>
 
     <TextView
         android:id="@+id/rating_text"
@@ -43,7 +44,7 @@
         android:layout_height="@dimen/standard_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="20dp"
+        android:layout_margin="@dimen/footer_margin"
         android:drawableRight="@drawable/ic_arrow_forward"
         android:text="@string/exitButton" />
 

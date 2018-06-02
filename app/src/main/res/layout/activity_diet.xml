@@ -6,15 +6,15 @@
     android:layout_height="match_parent"
     tools:context="com.example.dawid.projectpum.Diet">
 
-        <TextView
-            android:id="@+id/dietPreferences_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="33dp"
-            android:text="@string/dietPreferencesTitle"
-            android:textSize="25dp" />
+    <TextView
+        android:id="@+id/dietPreferences_textView"
+        style="@style/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="33dp"
+        android:text="@string/dietPreferencesTitle" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/diet_recycle_view"
@@ -25,15 +25,15 @@
             android:layout_marginTop="20dp"></android.support.v7.widget.RecyclerView>
 
 
-        <TextView
-            android:id="@+id/liquids_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/diet_recycle_view"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:text="@string/liquidsPreferencesTitle"
-            android:textSize="25dp" />
+    <TextView
+        android:id="@+id/liquids_textView"
+        style="@style/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/dietPreferences_textView"
+        android:layout_below="@+id/diet_recycle_view"
+        android:layout_marginTop="17dp"
+        android:text="@string/liquidsPreferencesTitle" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/liquids_recycle_view"
@@ -44,15 +44,14 @@
             android:layout_marginTop="11dp"></android.support.v7.widget.RecyclerView>
 
 
-    <Button
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/next_button"
-        android:layout_width="50sp"
-        android:layout_height="50sp"
-        android:background="@drawable/ic_arrow_forward"
-        android:gravity="center|bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/ic_arrow_forward"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_margin="20dp"
-        />
+        android:layout_margin="20dp" />
 
 </RelativeLayout>

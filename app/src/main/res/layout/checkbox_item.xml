@@ -5,8 +5,9 @@
 
     <CheckBox
         android:id="@+id/checkbox"
-        android:text="costam"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/kavivanar"
+        android:text="costam" />
 
 </LinearLayout>

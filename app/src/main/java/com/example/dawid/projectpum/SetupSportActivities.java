@@ -4,11 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Environment;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 
 import com.example.dawid.projectpum.DAL.Adapters.DietAdapter;
@@ -28,6 +31,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.content.SharedPreferences.Editor;
+import static android.support.v7.widget.RecyclerView.LayoutManager;
+import static butterknife.ButterKnife.bind;
+import static com.example.dawid.projectpum.R.id;
+import static com.example.dawid.projectpum.R.id.next_button;
+import static com.example.dawid.projectpum.R.id.sportActivity_recycle_view;
+import static com.example.dawid.projectpum.R.layout;
+import static com.example.dawid.projectpum.R.layout.activity_setup_sport_activities;
+
 public class SetupSportActivities extends AppCompatActivity {
 
     SharedPreferences shared = null;
@@ -37,31 +49,37 @@ public class SetupSportActivities extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setup_sport_activities);
-        ButterKnife.bind(this);
+        setContentView(activity_setup_sport_activities);
+        bind(this);
 
-        shared = getSharedPreferences("sport", Context.MODE_PRIVATE);
-        String json = shared.getString("sportBool","");
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setCustomView(R.layout.custom_action_bar_layout);
+        View view =getSupportActionBar().getCustomView();
+
+        shared = getSharedPreferences("sport", MODE_PRIVATE);
+        String json = shared.getString("sportBool", "");
         Gson googleJson = new Gson();
         isSelected = googleJson.fromJson(json, ArrayList.class);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         sportActivityRecycleView.setLayoutManager(layoutManager);
         sportActivityAdapter = new SportActivityAdapter(isSelected);
         sportActivityRecycleView.setAdapter(sportActivityAdapter);
     }
 
-    @OnClick(R.id.next_button) void goNext() {
+    @OnClick(next_button)
+    void goNext() {
         String boolJson = new Gson().toJson(sportActivityAdapter.IsSelected);
 
-        SharedPreferences.Editor editor = shared.edit();
+        Editor editor = shared.edit();
 
-        editor.putString("sportBool",boolJson);
+        editor.putString("sportBool", boolJson);
         editor.apply();
 
         //CSV WRITER
 
-    //        File path = Environment.getExternalStoragePublicDirectory(
+        //        File path = Environment.getExternalStoragePublicDirectory(
 //                Environment.DIRECTORY_DOWNLOADS);
 //        File sdCardFile = new File(path, "piesel.csv");
 //
@@ -81,12 +99,13 @@ public class SetupSportActivities extends AppCompatActivity {
 //            e.printStackTrace();
 //        } ss
 
-        Intent intent = new Intent(SetupSportActivities.this,Diet.class);
+        Intent intent = new Intent(SetupSportActivities.this, Diet.class);
         startActivity(intent);
     }
-    @BindView(R.id.next_button)
-    Button nextButton;
-    @BindView(R.id.sportActivity_recycle_view)
+
+    @BindView(next_button)
+    FloatingActionButton nextButton;
+    @BindView(sportActivity_recycle_view)
     RecyclerView sportActivityRecycleView;
 
 }

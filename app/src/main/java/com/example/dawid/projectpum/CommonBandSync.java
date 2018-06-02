@@ -4,10 +4,16 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -39,44 +45,79 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.app.TimePickerDialog.OnTimeSetListener;
+import static android.util.Log.i;
+import static android.util.Log.w;
+import static android.view.View.VISIBLE;
+import static butterknife.ButterKnife.bind;
+import static com.example.dawid.projectpum.DAL.Helpers.TimeFormatter.TimeToString;
+import static com.example.dawid.projectpum.R.id;
+import static com.example.dawid.projectpum.R.id.next_button;
+import static com.example.dawid.projectpum.R.id.pickEndTime;
+import static com.example.dawid.projectpum.R.id.pickStartTime;
+//import static com.example.dawid.projectpum.R.id.setup_button;
+import static com.example.dawid.projectpum.R.id.setup_button;
+import static com.example.dawid.projectpum.R.id.step_count;
+import static com.example.dawid.projectpum.R.id.sync_button;
+import static com.example.dawid.projectpum.R.layout;
+import static com.example.dawid.projectpum.R.layout.activity_common_band_sync;
+import static com.google.android.gms.auth.api.signin.GoogleSignIn.getLastSignedInAccount;
+import static com.google.android.gms.auth.api.signin.GoogleSignIn.hasPermissions;
+import static com.google.android.gms.fitness.Fitness.getHistoryClient;
+import static com.google.android.gms.fitness.FitnessOptions.ACCESS_READ;
+import static com.google.android.gms.fitness.FitnessOptions.builder;
+import static com.google.android.gms.fitness.data.DataType.AGGREGATE_STEP_COUNT_DELTA;
+import static com.google.android.gms.fitness.data.DataType.TYPE_STEP_COUNT_DELTA;
+import static com.google.android.gms.fitness.data.Field.FIELD_STEPS;
+import static java.util.Calendar.HOUR_OF_DAY;
+import static java.util.Calendar.MINUTE;
+import static java.util.Calendar.getInstance;
+
 public class CommonBandSync extends AppCompatActivity {
 
     private int mHour, mMinute;
     public static final String TAG = "StepCounter";
     int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 0533;
+    Context context = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_common_band_sync);
-        ButterKnife.bind(this);
+        setContentView(activity_common_band_sync);
+        bind(this);
+        context = this;
 
-        FitnessOptions fitnessOptions = FitnessOptions.builder()
-                .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
-                .addDataType(DataType.AGGREGATE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setCustomView(R.layout.custom_action_bar_layout);
+        View view =getSupportActionBar().getCustomView();
+
+        FitnessOptions fitnessOptions = builder()
+                .addDataType(TYPE_STEP_COUNT_DELTA, ACCESS_READ)
+                .addDataType(AGGREGATE_STEP_COUNT_DELTA, ACCESS_READ)
                 .build();
-        if (!GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(this), fitnessOptions)) {
+        if (!hasPermissions(getLastSignedInAccount(this), fitnessOptions)) {
             GoogleSignIn.requestPermissions(
                     this, // your activity
                     GOOGLE_FIT_PERMISSIONS_REQUEST_CODE,
-                    GoogleSignIn.getLastSignedInAccount(this),
+                    getLastSignedInAccount(this),
                     fitnessOptions);
-        }
-        else {
+        } else {
             readData();
         }
     }
 
     private void readData() {
         stepCount.setText("...");
-        final ProgressDialog dialog=new ProgressDialog(this);
-            dialog.setMessage("Loading step data");
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Loading step data");
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
         dialog.show();
 
-        Fitness.getHistoryClient(this, GoogleSignIn.getLastSignedInAccount(this))
-                .readDailyTotal(DataType.TYPE_STEP_COUNT_DELTA)
+
+        getHistoryClient(this, getLastSignedInAccount(this))
+                .readDailyTotal(TYPE_STEP_COUNT_DELTA)
                 .addOnSuccessListener(
                         new OnSuccessListener<DataSet>() {
                             @Override
@@ -84,13 +125,18 @@ public class CommonBandSync extends AppCompatActivity {
                                 long total =
                                         dataSet.isEmpty()
                                                 ? 0
-                                                : dataSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS).asInt();
+                                                : dataSet.getDataPoints().get(0).getValue(FIELD_STEPS).asInt();
 
-                                stepCount.setText(total+"");
-                                Log.i(TAG, "Total steps: " + total);
-                                dialog.hide();
-                                syncButton.setBackgroundColor(Color.GREEN);
-                                okText.setVisibility(View.VISIBLE);
+                                stepCount.setText(total + "");
+                                i(TAG, "Total steps: " + total);
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    public void run() {
+                                        dialog.dismiss();
+                                    }
+                                }, 1000); // 3000 milliseconds delay
+                                syncButton.setBackgroundColor(ContextCompat.getColor(context,R.color.primaryLightColor));
+//                                okText.setVisibility(VISIBLE);
                                 syncButton.setText("Zsynchronizowano");
                             }
                         })
@@ -98,66 +144,71 @@ public class CommonBandSync extends AppCompatActivity {
                         new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "There was a problem getting the step count.", e);
+                                w(TAG, "There was a problem getting the step count.", e);
                             }
                         });
     }
 
-    @OnClick(R.id.pickStartTime)
-    void setStartTime(){
+    @OnClick(pickStartTime)
+    void setStartTime() {
         TimePickerSupport(startTime);
     }
 
-    @OnClick(R.id.pickEndTime)
-    void setEndTime(){
+    @OnClick(pickEndTime)
+    void setEndTime() {
         TimePickerSupport(endTime);
     }
-    void TimePickerSupport(final TextView textView){
-        final Calendar c = Calendar.getInstance();
-        mHour = c.get(Calendar.HOUR_OF_DAY);
-        mMinute = c.get(Calendar.MINUTE);
+
+    void TimePickerSupport(final TextView textView) {
+        final Calendar c = getInstance();
+        mHour = c.get(HOUR_OF_DAY);
+        mMinute = c.get(MINUTE);
 
         // Launch Time Picker Dialog
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
-                new TimePickerDialog.OnTimeSetListener() {
+                new OnTimeSetListener() {
 
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
-                        textView.setText(TimeFormatter.TimeToString(hourOfDay,minute));
+                        textView.setText(TimeToString(hourOfDay, minute));
                     }
                 }, mHour, mMinute, false);
         timePickerDialog.show();
     }
 
-    @OnClick(R.id.next_button) void goNext(){
-        Intent intent = new Intent(CommonBandSync.this,DayInfo.class);
-        startActivity(intent);
-    }
-    @OnClick(R.id.setup) void firstUseSetup(){
-        Intent intent = new Intent(CommonBandSync.this,SetupSportActivities.class);
+    @OnClick(next_button)
+    void goNext() {
+        Intent intent = new Intent(CommonBandSync.this, DayInfo.class);
         startActivity(intent);
     }
 
-    @OnClick(R.id.sync_button) void syncSteps(){
+    @OnClick(setup_button)
+    void firstUseSetup() {
+        Intent intent = new Intent(CommonBandSync.this, SetupSportActivities.class);
+        startActivity(intent);
+    }
+
+    @OnClick(sync_button)
+    void syncSteps() {
         readData();
     }
 
-    @BindView(R.id.ok_button)
-    TextView okText;
-
-    @BindView(R.id.step_count)
+    @BindView(step_count)
     TextView stepCount;
 
-    @BindView(R.id.sync_button)
+    @BindView(sync_button)
     Button syncButton;
 
-    @BindView(R.id.next_button)
-    Button nextButton;
+//    @BindView(setup_button)
+//    FloatingActionButton setupBtn;
 
-    @BindView(R.id.pickStartTime)
+    @BindView(next_button)
+    FloatingActionButton nextButton;
+
+    @BindView(pickStartTime)
     Button startTime;
 
-    @BindView(R.id.pickEndTime)
+    @BindView(pickEndTime)
     Button endTime;
 }

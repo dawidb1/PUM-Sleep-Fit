@@ -83,7 +83,7 @@ public class CheckboxesEnums {
         COFFEE("Kawa"),
         TEA("Herbata"),
         ALCOHOL("Alkohol"),
-        ENERGY_DRINKS("Napoje energetyczne"),
+        ENERGY_DRINKS("Energetyki"),
         YERBA_MATE("Yerba mate");
 
         Liquids(String name) {
