@@ -110,7 +110,7 @@ public class CommonBandSync extends AppCompatActivity {
     private void readData() {
         stepCount.setText("...");
         final ProgressDialog dialog = new ProgressDialog(this);
-        dialog.setMessage("Loading step data");
+        dialog.setMessage("Synchronizowanie danych");
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
         dialog.show();

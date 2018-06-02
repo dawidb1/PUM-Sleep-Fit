@@ -17,16 +17,6 @@
         android:layout_marginTop="28dp"
         android:text="@string/activityTitle" />
 
-    <!--<TextView-->
-        <!--android:id="@+id/textView4"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignBaseline="@+id/textView3"-->
-        <!--android:layout_alignBottom="@+id/textView3"-->
-        <!--android:layout_toStartOf="@+id/next_button"-->
-        <!--android:text="@string/physicalSubtitle"-->
-        <!--android:textSize="@dimen/title" />-->
-
     <LinearLayout
         android:gravity="center"
         android:layout_marginTop="80dp"
@@ -38,21 +28,26 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:layout_marginVertical="10dp"
             android:orientation="horizontal">
 
             <TextView
+                android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
                 android:text="typ" />
 
             <TextView
+                android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
                 android:text="intensywność" />
 
             <TextView
+                android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
@@ -62,26 +57,24 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/border"
             android:orientation="vertical">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/physical_item_recycle_view"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border"
                 android:orientation="horizontal">
 
                 <Button
-                    android:background="@color/secondaryLightColor"
+                    android:background="@color/primaryLightColor"
                     android:layout_height="30dp"
                     android:id="@+id/add_sport_name"
                     android:layout_width="wrap_content"
-                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_marginVertical="10dp"
                     android:text="dodaj"
                     android:textAllCaps="false" />
@@ -89,7 +82,7 @@
                 <Button
                     android:id="@+id/add_sport_value"
                     android:layout_width="wrap_content"
-                    android:background="@color/secondaryLightColor"
+                    android:background="@color/primaryLightColor"
                     android:layout_height="30dp"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginVertical="10dp"
@@ -99,60 +92,16 @@
                 <Button
                     android:id="@+id/add_sport_time"
                     android:layout_width="wrap_content"
-                    android:background="@color/secondaryLightColor"
+                    android:background="@color/primaryLightColor"
                     android:layout_height="30dp"
-                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginVertical="10dp"
                     android:text="0"
                     android:textAllCaps="false" />
             </LinearLayout>
         </LinearLayout>
-
-
-        <!--<TextView-->
-            <!--android:id="@+id/textView5"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/psychicalSubtitle"-->
-            <!--android:textSize="@dimen/title" />-->
     </LinearLayout>
 
-
-    <!--<RelativeLayout-->
-        <!--android:id="@+id/relativeLayout3"-->
-        <!--android:layout_width="@dimen/bandInfo_layout"-->
-        <!--android:layout_height="200dp"-->
-        <!--android:layout_alignEnd="@+id/textView3"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_marginEnd="37dp"-->
-        <!--android:orientation="vertical">-->
-
-        <!--<Button-->
-            <!--android:id="@+id/button1"-->
-            <!--android:layout_width="@dimen/long_button"-->
-            <!--android:layout_height="wrap_content" />-->
-
-        <!--<Button-->
-            <!--android:id="@+id/button2"-->
-            <!--android:layout_width="@dimen/long_button"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentStart="true"-->
-            <!--android:layout_below="@+id/button1" />-->
-
-        <!--<Button-->
-            <!--android:id="@+id/button3"-->
-            <!--android:layout_width="@dimen/long_button"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentStart="true"-->
-            <!--android:layout_below="@+id/button2" />-->
-
-        <!--<Button-->
-            <!--android:id="@+id/button4"-->
-            <!--android:layout_width="@dimen/long_button"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentStart="true"-->
-            <!--android:layout_below="@+id/button3" />-->
-    <!--</RelativeLayout>-->
     <android.support.design.widget.FloatingActionButton
         app:backgroundTint="@color/primaryDarkColor"
         android:tint="@color/secondaryTextColor"
@@ -162,6 +111,7 @@
         android:layout_alignBottom="@+id/next_button"
         android:layout_centerHorizontal="true"
         android:src="@drawable/ic_add_black_24dp" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/next_button"
         android:layout_width="wrap_content"

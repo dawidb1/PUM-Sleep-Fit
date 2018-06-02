@@ -18,6 +18,7 @@
         style="@style/title" />
 
     <Button
+        android:drawableRight="@drawable/ic_refresh_black_24dp"
         android:id="@+id/sync_button"
         android:layout_width="@dimen/sync_button_w"
         android:layout_height="@dimen/sync_button_h"

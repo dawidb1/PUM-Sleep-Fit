@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.dawid.projectpum.DAL.Adapters.PhysicalAdapter;
 import com.example.dawid.projectpum.DAL.CheckboxesEnums;
@@ -57,6 +58,7 @@ public class PhysPsychActivity extends AppCompatActivity {
 
         arrayList = new ArrayList<>();
         RefreshRecycleView();
+        SetButtonsDefaultValue();
     }
 
     @OnClick(id.addActivity)
@@ -66,6 +68,9 @@ public class PhysPsychActivity extends AppCompatActivity {
             arrayList.add(item);
             RefreshRecycleView();
             SetButtonsDefaultValue();
+        }
+        else {
+            Toast.makeText(this,"Uzupełnij aktywność!",Toast.LENGTH_LONG).show();
         }
     }
 
@@ -110,6 +115,7 @@ public class PhysPsychActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 addSportName.setText(enumArray[which]);
+                chooseSportValue();
 //                switch (which) {
 //                    case 0: // horse
 //                    case 1: // cow
@@ -142,11 +148,13 @@ public class PhysPsychActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 addSportValue.setText(enumArray[which]);
+                chooseSportTime();
 //                switch (which) {
 //                    case 0: // horse
 //                    case 1: // cow
 //                    case 2: // camel
 //                    case 3: // sheep
+
 //                    case 4: // goat
 //                }
             }

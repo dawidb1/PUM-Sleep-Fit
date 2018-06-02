@@ -39,9 +39,10 @@
     </android.support.v7.widget.RecyclerView>
 
     <Button
+        android:background="@color/secondaryColor"
         android:id="@+id/exit_button"
         android:layout_width="@dimen/long_button"
-        android:layout_height="@dimen/standard_button"
+        android:layout_height="@dimen/sharp_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/footer_margin"

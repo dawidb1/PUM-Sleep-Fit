@@ -11,9 +11,9 @@ public class CheckboxesEnums {
         JOGGING("Bieganie"),
         GYM("Siłownia"),
         BIKE("Rower"),
-        WALKING("Spacerowanie"),
+        WALKING("Spacer"),
         SWIMMING("Pływanie"),
-        CLIMBING("Wspinaczka górska"),
+        CLIMBING("Wspinaczka"),
         FITNESS("Fitness"),
         IRONING("Prasowanie");
 
@@ -45,6 +45,7 @@ public class CheckboxesEnums {
         }
     }
     public enum SportTime{
+        HOURS2("120"),
         LARGE("90"),
         MEDIUM("60"),
         SMALL("30"),
