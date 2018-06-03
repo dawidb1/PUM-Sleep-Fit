@@ -8,11 +8,15 @@ import java.util.ArrayList;
  * Created by Dawid on 15.05.2018.
  */
 
-public class TimeFormatter {
+public class EasyConverter {
     public static String TimeToString(int hours, int minutes){
         String result = String.format("%02d", hours) + ":"
                 + String.format("%02d", minutes);
         return result;
+    }
+    public static String BoolToString(boolean bool){
+        if (bool){return "True";}
+        else {return "False";}
     }
 
 //    public static <T> EnumToStringArray(ArrayList<T> enumList){

@@ -1,57 +1,42 @@
 package com.example.dawid.projectpum;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
-import com.example.dawid.projectpum.DAL.Helpers.TimeFormatter;
+import com.example.dawid.projectpum.DAL.InstanceSaves.CsvModel;
+import com.example.dawid.projectpum.DAL.InstanceSaves.ICsvHandler;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.FitnessOptions;
-import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
-import com.google.android.gms.fitness.data.DataType;
-import com.google.android.gms.fitness.data.Field;
-import com.google.android.gms.fitness.data.Value;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.sql.Time;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.app.TimePickerDialog.OnTimeSetListener;
 import static android.util.Log.i;
 import static android.util.Log.w;
-import static android.view.View.VISIBLE;
 import static butterknife.ButterKnife.bind;
-import static com.example.dawid.projectpum.DAL.Helpers.TimeFormatter.TimeToString;
-import static com.example.dawid.projectpum.R.id;
+import static com.example.dawid.projectpum.DAL.Helpers.EasyConverter.TimeToString;
 import static com.example.dawid.projectpum.R.id.next_button;
 import static com.example.dawid.projectpum.R.id.pickEndTime;
 import static com.example.dawid.projectpum.R.id.pickStartTime;
@@ -59,7 +44,6 @@ import static com.example.dawid.projectpum.R.id.pickStartTime;
 import static com.example.dawid.projectpum.R.id.setup_button;
 import static com.example.dawid.projectpum.R.id.step_count;
 import static com.example.dawid.projectpum.R.id.sync_button;
-import static com.example.dawid.projectpum.R.layout;
 import static com.example.dawid.projectpum.R.layout.activity_common_band_sync;
 import static com.google.android.gms.auth.api.signin.GoogleSignIn.getLastSignedInAccount;
 import static com.google.android.gms.auth.api.signin.GoogleSignIn.hasPermissions;
@@ -73,12 +57,14 @@ import static java.util.Calendar.HOUR_OF_DAY;
 import static java.util.Calendar.MINUTE;
 import static java.util.Calendar.getInstance;
 
-public class CommonBandSync extends AppCompatActivity {
+public class CommonBandSync extends AppCompatActivity implements ICsvHandler {
 
     private int mHour, mMinute;
     public static final String TAG = "StepCounter";
     int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 0533;
     Context context = null;
+    public CsvModel model = null;
+    public SharedPreferences shared = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,11 +72,13 @@ public class CommonBandSync extends AppCompatActivity {
         setContentView(activity_common_band_sync);
         bind(this);
         context = this;
+        model = new CsvModel();
+        shared = getSharedPreferences("csv_model", MODE_PRIVATE);
 
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.custom_action_bar_layout);
-        View view =getSupportActionBar().getCustomView();
+        View view = getSupportActionBar().getCustomView();
 
         FitnessOptions fitnessOptions = builder()
                 .addDataType(TYPE_STEP_COUNT_DELTA, ACCESS_READ)
@@ -105,6 +93,42 @@ public class CommonBandSync extends AppCompatActivity {
         } else {
             readData();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        fillModel();
+        saveSharedPrefFromModel();
+        saveStateFromModel(outState);
+        super.onSaveInstanceState(outState);
+    }
+    public void fillModel(){
+        model.StartSleepString =  startTime.getText().toString();
+        model.EndSleepString = endTime.getText().toString();
+        model.Steps = Integer.parseInt(stepCount.getText().toString());
+    }
+    public void saveStateFromModel(Bundle outState){
+        outState.putString("startSleep",model.StartSleepString);
+        outState.putString("endSleep", model.EndSleepString);
+        outState.putInt("steps", model.Steps);
+    }
+    public void saveSharedPrefFromModel(){
+        SharedPreferences.Editor editor = shared.edit();
+        editor.putString("startSleep", model.StartSleepString);
+        editor.putString("endSleep", model.EndSleepString);
+        editor.putString("stepsString", model.Steps+"");
+        editor.putInt("steps", model.Steps);
+        editor.apply();
+
+        int x = shared.getInt("steps", 0);
+        Log.i("steps: ",x +"");
+    }
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        startTime.setText(savedInstanceState.get("startSleep").toString());
+        endTime.setText(savedInstanceState.get("endSleep").toString());
     }
 
     private void readData() {
@@ -200,8 +224,6 @@ public class CommonBandSync extends AppCompatActivity {
     @BindView(sync_button)
     Button syncButton;
 
-//    @BindView(setup_button)
-//    FloatingActionButton setupBtn;
 
     @BindView(next_button)
     FloatingActionButton nextButton;

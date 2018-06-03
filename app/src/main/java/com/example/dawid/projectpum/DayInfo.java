@@ -2,6 +2,7 @@ package com.example.dawid.projectpum;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -9,7 +10,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.RadioButton;
+import android.widget.Toast;
+
+import com.example.dawid.projectpum.DAL.InstanceSaves.CsvEnums;
+import com.example.dawid.projectpum.DAL.InstanceSaves.CsvModel;
+import com.example.dawid.projectpum.DAL.InstanceSaves.ICsvHandler;
 
 import java.util.ArrayList;
 
@@ -41,18 +48,40 @@ import static com.example.dawid.projectpum.R.string.dialog_message;
 import static com.example.dawid.projectpum.R.string.dialog_title;
 import static com.example.dawid.projectpum.R.string.ok;
 
-public class DayInfo extends AppCompatActivity {
+public class DayInfo extends AppCompatActivity implements ICsvHandler {
+    public CsvModel model = null;
+    public SharedPreferences shared = null;
 
+    private CsvEnums.Mood moodClicked;
+    private CsvEnums.Energy energyClicked;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(activity_day_info);
         bind(this);
+        model = new CsvModel();
+        shared = getSharedPreferences("csv_model", MODE_PRIVATE);
 
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.custom_action_bar_layout);
-        View view =getSupportActionBar().getCustomView();
+        View view = getSupportActionBar().getCustomView();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        fillModel();
+        saveSharedPrefFromModel();
+        saveStateFromModel(outState);
+        super.onSaveInstanceState(outState);
+    }
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        moodRadio.setChecked(savedInstanceState.getBoolean("mood"));
+        neutralRadio.setChecked(savedInstanceState.getBoolean("neutral"));
+        moodBadRadio.setChecked(savedInstanceState.getBoolean("moodBad"));
     }
 
     //region snoozeDialog
@@ -80,18 +109,21 @@ public class DayInfo extends AppCompatActivity {
     //Buttons mood onClick
     @OnClick(mood_button)
     void checkMoodRadio() {
+        moodClicked = CsvEnums.Mood.MOOD;
         uncheckAllMoodRadio();
         moodRadio.toggle();
     }
 
     @OnClick(neutral_button)
     void checkNeutralRadio() {
+        moodClicked = CsvEnums.Mood.NEUTRAL;
         uncheckAllMoodRadio();
         neutralRadio.toggle();
     }
 
     @OnClick(mood_bad_button)
     void checkMoodBadRadio() {
+        moodClicked = CsvEnums.Mood.MOOD_BAD;
         uncheckAllMoodRadio();
         moodBadRadio.toggle();
     }
@@ -117,18 +149,21 @@ public class DayInfo extends AppCompatActivity {
     //Buttons energy onClick
     @OnClick(min_energy_btn)
     void checkMinEnergyRadio() {
+        energyClicked = CsvEnums.Energy.LOW;
         uncheckAllEnergyRadio();
         minEnergyRadio.toggle();
     }
 
     @OnClick(medium_energy_btn)
     void checkMediumEnergyRadio() {
+        energyClicked = CsvEnums.Energy.MID;
         uncheckAllEnergyRadio();
         mediumEnergyRadio.toggle();
     }
 
     @OnClick(max_energy_btn)
     void checkMaxEnergyRadio() {
+        energyClicked = CsvEnums.Energy.HIGH;
         uncheckAllEnergyRadio();
         maxEnergyRadio.toggle();
     }
@@ -204,9 +239,36 @@ public class DayInfo extends AppCompatActivity {
 
     @BindView(id.snoreInfo)
     Button snoreInfo;
+    @BindView(id.snore_checkbox)
+    CheckBox snoreCheckbox;
     //bind nextButton
 
     @BindView(next_button)
     FloatingActionButton nextButton;
+
+    @Override
+    public void fillModel() {
+        model.Mood =  moodClicked;
+        model.Energy = energyClicked;
+        model.Snore = snoreCheckbox.isChecked();
+    }
+
+    @Override
+    public void saveSharedPrefFromModel() {
+        SharedPreferences.Editor editor = shared.edit();
+        editor.putInt("mood", model.Mood.ordinal());
+        editor.putInt("energy", model.Energy.ordinal());
+        editor.putInt("steps", model.Steps);
+        editor.putBoolean("snore",model.Snore);
+        editor.apply();
+    }
+
+    @Override
+    public void saveStateFromModel(Bundle outState) {
+        outState.putInt("mood", model.Mood.ordinal());
+        outState.putInt("energy",  model.Energy.ordinal());
+        outState.putInt("steps", model.Steps);
+        outState.putBoolean("snore",model.Snore);
+    }
     //endregion
 }
