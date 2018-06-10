@@ -9,6 +9,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -22,6 +26,7 @@ import static com.example.dawid.projectpum.R.layout.activity_welcome;
 public class Welcome extends AppCompatActivity {
 
     SharedPreferences prefs = null;
+    String PATH = "results.csv";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,7 @@ public class Welcome extends AppCompatActivity {
             // Do first run stuff here then set 'firstrun' as false
             // using the following line to edit/commit prefs
             prefs.edit().putBoolean("firstrun", false).commit();
+
         } else {
             Intent intent = new Intent(Welcome.this, CommonBandSync.class);
             startActivity(intent);

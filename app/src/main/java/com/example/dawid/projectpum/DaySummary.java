@@ -33,6 +33,7 @@ public class DaySummary extends AppCompatActivity {
 
     CsvModel model = null;
     SharedPreferences prefs = null;
+    String FILE_NAME = "results.csv";
 
     public int Rating = 4;
     @Override
@@ -64,20 +65,9 @@ public class DaySummary extends AppCompatActivity {
     }
 
     void saveCsv(){
-        //try append to existing file
-//        File path = Environment.getExternalStorageDirectory();
-//        Log.i("path",path.getAbsolutePath());
-//
-//        File file = new File(path, "piesel.csv");
-//
-//        CSVWriter writer = null;
-//
-//        FileWriter mFileWriter = new FileWriter("piesel.csv",true);
-//        CSVWriter mCsvWriter = new CSVWriter(mFileWriter);
-        //if(file.exist())
         File path = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_DOWNLOADS);
-        File sdCardFile = new File(path, "piesel.csv");
+        File readyFile = new File(path, FILE_NAME);
 
         CSVWriter writer = null;
 
@@ -90,8 +80,9 @@ public class DaySummary extends AppCompatActivity {
         Log.i("energy",model.Energy.toString() + " " + model.Energy.ordinal());
         Log.i("model in toString",Integer.toString(model.Steps));
 
-
-        data.add(model.Headers);
+        if (readyFile.length() == 0){
+            data.add(model.Headers);
+        }
         data.add(new String[] {
                     model.StartSleepString,
                     model.EndSleepString,
@@ -102,7 +93,7 @@ public class DaySummary extends AppCompatActivity {
                 });
 
         try {
-            writer = new CSVWriter(new FileWriter(sdCardFile));
+            writer = new CSVWriter(new FileWriter(readyFile,true));
             writer.writeAll(data);
             writer.close();
         } catch (IOException e) {
