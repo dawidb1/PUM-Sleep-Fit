@@ -22,6 +22,7 @@ public class CsvModel {
 
     public boolean Snore;
     public String Activities;
+    public int ActivitiesScore;
 
     public int Fruits;
     public int Vegetables;

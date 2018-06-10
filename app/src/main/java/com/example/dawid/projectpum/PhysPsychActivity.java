@@ -2,6 +2,7 @@ package com.example.dawid.projectpum;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -9,13 +10,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.dawid.projectpum.DAL.Adapters.PhysicalAdapter;
 import com.example.dawid.projectpum.DAL.CheckboxesEnums;
+import com.example.dawid.projectpum.DAL.InstanceSaves.CsvModel;
+import com.example.dawid.projectpum.DAL.InstanceSaves.ICsvHandler;
 import com.example.dawid.projectpum.DAL.PhysicalItemVM;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -41,37 +46,39 @@ import static com.example.dawid.projectpum.R.layout;
 import static com.example.dawid.projectpum.R.layout.activity_phys_psych;
 import static java.util.EnumSet.allOf;
 
-public class PhysPsychActivity extends AppCompatActivity {
+public class PhysPsychActivity extends AppCompatActivity implements ICsvHandler {
 
     ArrayList<PhysicalItemVM> arrayList;
+    public CsvModel model = null;
+    public SharedPreferences shared = null;
+    int scoreTime;
+    int scoreIntensivity;
+    int allScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(activity_phys_psych);
         bind(this);
+        init();
 
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
-        getSupportActionBar().setCustomView(R.layout.custom_action_bar_layout);
-        View view =getSupportActionBar().getCustomView();
-
-        arrayList = new ArrayList<>();
+        loadActionBar();
         RefreshRecycleView();
         SetButtonsDefaultValue();
     }
-
-    @OnClick(id.addActivity)
-    void setAddActivity() {
-        if (AreButtonsSets()) {
-            PhysicalItemVM item = new PhysicalItemVM(addSportName.getText().toString(), addSportValue.getText().toString(), addSportTime.getText().toString());
-            arrayList.add(item);
-            RefreshRecycleView();
-            SetButtonsDefaultValue();
-        }
-        else {
-            Toast.makeText(this,"Uzupełnij aktywność!",Toast.LENGTH_LONG).show();
-        }
+    void init(){
+        model = new CsvModel();
+        shared = getSharedPreferences("csv_model", MODE_PRIVATE);
+        scoreTime = 0;
+        scoreIntensivity = 0;
+        allScore = 0;
+        arrayList = new ArrayList<>();
+    }
+    void loadActionBar(){
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setCustomView(R.layout.custom_action_bar_layout);
+        getSupportActionBar().getCustomView();
     }
 
     void RefreshRecycleView() {
@@ -81,6 +88,27 @@ public class PhysPsychActivity extends AppCompatActivity {
         physicalRecyclerView.setAdapter(physicalAdapter);
     }
 
+    @OnClick(id.addActivity)
+    void setAddActivity() {
+        if (AreButtonsSets()) {
+            PhysicalItemVM item = new PhysicalItemVM(addSportName.getText().toString(), addSportValue.getText().toString(), addSportTime.getText().toString());
+            arrayList.add(item);
+            RefreshRecycleView();
+            SetButtonsDefaultValue();
+            allScore = scoreTime + scoreIntensivity;
+            scoreIntensivity = 0;
+            scoreTime = 0;
+        }
+        else {
+            Toast.makeText(this,"Uzupełnij aktywność!",Toast.LENGTH_LONG).show();
+        }
+    }
+
+    String ActivitiesToJson(){
+        Gson gson = new Gson();
+        String json = gson.toJson(arrayList);
+        return json;
+    }
     void SetButtonsDefaultValue() {
         addSportName.setText("dodaj");
         addSportValue.setText("wybierz");
@@ -116,13 +144,6 @@ public class PhysPsychActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 addSportName.setText(enumArray[which]);
                 chooseSportValue();
-//                switch (which) {
-//                    case 0: // horse
-//                    case 1: // cow
-//                    case 2: // camel
-//                    case 3: // sheep
-//                    case 4: // goat
-//                }
             }
         });
 
@@ -148,15 +169,8 @@ public class PhysPsychActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 addSportValue.setText(enumArray[which]);
+                scoreIntensivity =  enumArray.length - which;
                 chooseSportTime();
-//                switch (which) {
-//                    case 0: // horse
-//                    case 1: // cow
-//                    case 2: // camel
-//                    case 3: // sheep
-
-//                    case 4: // goat
-//                }
             }
         });
 
@@ -168,7 +182,7 @@ public class PhysPsychActivity extends AppCompatActivity {
     @OnClick(add_sport_time)
     void chooseSportTime() {
         Builder builder = new Builder(PhysPsychActivity.this);
-        builder.setTitle("Wybierz intensywność");
+        builder.setTitle("Wybierz czas");
 
         ArrayList<SportTime> enumList = new ArrayList<SportTime>(allOf(SportTime.class));
         final String[] enumArray = new String[enumList.size()];
@@ -182,13 +196,7 @@ public class PhysPsychActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 addSportTime.setText(enumArray[which]);
-//                switch (which) {
-//                    case 0: // horse
-//                    case 1: // cow
-//                    case 2: // camel
-//                    case 3: // sheep
-//                    case 4: // goat
-//                }
+                scoreTime =  enumArray.length - which;
             }
         });
 
@@ -201,6 +209,8 @@ public class PhysPsychActivity extends AppCompatActivity {
 
     @OnClick(next_button)
     void goNext() {
+        fillModel();
+        saveSharedPrefFromModel();
         Intent intent = new Intent(PhysPsychActivity.this, FruitsVegetables.class);
         startActivity(intent);
     }
@@ -219,4 +229,25 @@ public class PhysPsychActivity extends AppCompatActivity {
 
     @BindView(next_button)
     FloatingActionButton nextButton;
+
+    @Override
+    public void fillModel() {
+        model.Activities = ActivitiesToJson();
+        model.ActivitiesScore = allScore;
+    }
+
+    @Override
+    public void saveSharedPrefFromModel() {
+        SharedPreferences.Editor editor = shared.edit();
+        editor.putString("activities", model.Activities);
+        Log.i("model.activitiesJson",model.Activities);
+        Log.i("model.avtivityScore",model.ActivitiesScore+ "");
+        editor.putInt("activitiesScore",model.ActivitiesScore);
+        editor.apply();
+    }
+
+    @Override
+    public void saveStateFromModel(Bundle outState) {
+        outState.putString("activities", model.Activities);
+    }
 }

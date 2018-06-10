@@ -1,6 +1,5 @@
 package com.example.dawid.projectpum;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.support.v7.app.ActionBar;
@@ -9,10 +8,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 
-import com.example.dawid.projectpum.DAL.Adapters.DietAdapter;
 import com.example.dawid.projectpum.DAL.Adapters.StarsAdapter;
 import com.example.dawid.projectpum.DAL.Helpers.EasyConverter;
 import com.example.dawid.projectpum.DAL.InstanceSaves.CsvEnums;
@@ -35,36 +32,59 @@ public class DaySummary extends AppCompatActivity {
     SharedPreferences prefs = null;
     String FILE_NAME = "results.csv";
 
-    public int Rating = 4;
+    public int Rating;
+    static int maxRating = 5;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day_summary);
         ButterKnife.bind(this);
+        init();
+        loadActionBar();
+
+        fillModel();
+        Rating = model.ActivitiesScore%maxRating;
+        Log.i("ActivitiesScore",model.ActivitiesScore + "");
+        Log.i("Rating",Rating + "");
+        loadRecycleView();
+    }
+    void init(){
         prefs = getSharedPreferences("csv_model", MODE_PRIVATE);
         model = new CsvModel();
-
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
-        getSupportActionBar().setCustomView(R.layout.custom_action_bar_layout);
-        View view =getSupportActionBar().getCustomView();
-
+        Rating = 0;
+    }
+    void loadRecycleView(){
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         StarsAdapter adapter = new StarsAdapter(Rating);
         recyclerView.setAdapter(adapter);
     }
+    void loadActionBar(){
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setCustomView(R.layout.custom_action_bar_layout);
+        getSupportActionBar().getCustomView();
+    }
 
     public void fillModel(){
         model.StartSleepString = prefs.getString("startSleep","");
         model.EndSleepString = prefs.getString("endSleep","");
-        model.StepsString =  prefs.getString("stepsString","0");
-        model.Mood = CsvEnums.Mood.values()[prefs.getInt("mood",0)];
-        model.Energy = CsvEnums.Energy.values()[prefs.getInt("energy",0)];
+        model.StepsString =  prefs.getString("stepsString","999");
+        model.Mood = CsvEnums.Mood.values()[prefs.getInt("mood",99)];
+        model.Energy = CsvEnums.Energy.values()[prefs.getInt("energy",99)];
         model.Snore = prefs.getBoolean("snore",false);
+        model.Activities = prefs.getString("activities","noname");
+        model.ActivitiesScore = prefs.getInt("activitiesScore",999);
+        model.Fruits = prefs.getInt("fruits",999);
+        model.Vegetables = prefs.getInt("vegetables",999);
+        model.Coffee = prefs.getInt("coffee",999);
+        model.Tea = prefs.getInt("tea",999);
+        model.Alcohol = prefs.getInt("alcohol",999);
+        model.EnergyDrinks = prefs.getInt("energyDrinks",999);
     }
 
-    void saveCsv(){
+    void writeModelToCsv(){
         File path = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_DOWNLOADS);
         File readyFile = new File(path, FILE_NAME);
@@ -74,22 +94,24 @@ public class DaySummary extends AppCompatActivity {
         List<String[]> data = new ArrayList<String[]>();
 
         int x = prefs.getInt("steps", 0);
-        String stepsString =   prefs.getString("stepsString","dupa");
-        Log.i("stepsInt",x + "");
-        Log.i("stepsString",stepsString);
-        Log.i("energy",model.Energy.toString() + " " + model.Energy.ordinal());
-        Log.i("model in toString",Integer.toString(model.Steps));
 
         if (readyFile.length() == 0){
             data.add(model.Headers);
         }
         data.add(new String[] {
-                    model.StartSleepString,
-                    model.EndSleepString,
-                    model.StepsString,
-                    model.Mood.name(),
-                    model.Energy.toString(),
-                    EasyConverter.BoolToString(model.Snore),
+                model.StartSleepString,
+                model.EndSleepString,
+                model.StepsString,
+                model.Mood.name(),
+                model.Energy.name(),
+                EasyConverter.BoolToString(model.Snore),
+                model.Activities,
+                model.Fruits+"",
+                model.Vegetables+"",
+                model.Coffee +  "",
+                model.Tea+"",
+                model.Alcohol+"",
+                model.EnergyDrinks+""
                 });
 
         try {
@@ -102,8 +124,7 @@ public class DaySummary extends AppCompatActivity {
     }
 
     @OnClick(R.id.exit_button) void exitApp(){
-        fillModel();
-        saveCsv();
+        writeModelToCsv();
         this.finishAffinity();
     }
 

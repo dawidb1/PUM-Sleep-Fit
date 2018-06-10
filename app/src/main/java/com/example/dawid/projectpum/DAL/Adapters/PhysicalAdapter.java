@@ -30,7 +30,6 @@ import butterknife.ButterKnife;
 public class PhysicalAdapter extends RecyclerView.Adapter<PhysicalAdapter.ViewHolder>{
     private Context context;
     public ArrayList<PhysicalItemVM> PhysicalList;
-
     public PhysicalAdapter(ArrayList<PhysicalItemVM> List) {
         PhysicalList = List;
     }
@@ -74,9 +73,6 @@ public class PhysicalAdapter extends RecyclerView.Adapter<PhysicalAdapter.ViewHo
                 break;
                 case 1: {
                     color = ContextCompat.getColor(context,R.color.secondaryDarkColor);
-//                    this.sportName.setTextColor(ContextCompat.getColor(context,R.color.secondaryTextColor));
-//                    this.sportValue.setTextColor(ContextCompat.getColor(context,R.color.secondaryTextColor));
-//                    this.sportTime.setTextColor(ContextCompat.getColor(context,R.color.secondaryTextColor));
                     break;
                 }
                 case 2: color = ContextCompat.getColor(context,R.color.secondaryLightColor);

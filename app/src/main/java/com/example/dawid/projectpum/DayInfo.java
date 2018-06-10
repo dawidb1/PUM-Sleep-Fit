@@ -27,6 +27,7 @@ import butterknife.OnClick;
 import static android.content.DialogInterface.OnClickListener;
 import static android.support.v7.app.AlertDialog.Builder;
 import static butterknife.ButterKnife.bind;
+import static com.example.dawid.projectpum.DAL.InstanceSaves.CsvEnums.*;
 import static com.example.dawid.projectpum.R.id;
 import static com.example.dawid.projectpum.R.id.max_energy_btn;
 import static com.example.dawid.projectpum.R.id.max_energy_radiobtn;
@@ -44,6 +45,7 @@ import static com.example.dawid.projectpum.R.id.next_button;
 import static com.example.dawid.projectpum.R.layout;
 import static com.example.dawid.projectpum.R.layout.activity_day_info;
 import static com.example.dawid.projectpum.R.string;
+import static com.example.dawid.projectpum.R.string.cancel;
 import static com.example.dawid.projectpum.R.string.dialog_message;
 import static com.example.dawid.projectpum.R.string.dialog_title;
 import static com.example.dawid.projectpum.R.string.ok;
@@ -52,22 +54,27 @@ public class DayInfo extends AppCompatActivity implements ICsvHandler {
     public CsvModel model = null;
     public SharedPreferences shared = null;
 
-    private CsvEnums.Mood moodClicked;
-    private CsvEnums.Energy energyClicked;
+    private Mood moodClicked;
+    private Energy energyClicked;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(activity_day_info);
         bind(this);
+        init();
+        loadActionBar();
+    }
+    void init(){
         model = new CsvModel();
         shared = getSharedPreferences("csv_model", MODE_PRIVATE);
-
+    }
+    void loadActionBar(){
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.custom_action_bar_layout);
-        View view = getSupportActionBar().getCustomView();
+        getSupportActionBar().getCustomView();
     }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         fillModel();
@@ -79,9 +86,18 @@ public class DayInfo extends AppCompatActivity implements ICsvHandler {
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        moodRadio.setChecked(savedInstanceState.getBoolean("mood"));
-        neutralRadio.setChecked(savedInstanceState.getBoolean("neutral"));
-        moodBadRadio.setChecked(savedInstanceState.getBoolean("moodBad"));
+        int state = savedInstanceState.getInt("mood",99);
+        switch (Mood.values()[state]){
+            case MOOD:
+                moodRadio.setChecked(true);
+                break;
+            case NEUTRAL:
+                neutralRadio.setChecked(true);
+                break;
+            case MOOD_BAD:
+                moodBadRadio.setChecked(true);
+                break;
+        }
     }
 
     //region snoozeDialog
@@ -109,21 +125,21 @@ public class DayInfo extends AppCompatActivity implements ICsvHandler {
     //Buttons mood onClick
     @OnClick(mood_button)
     void checkMoodRadio() {
-        moodClicked = CsvEnums.Mood.MOOD;
+        moodClicked = Mood.MOOD;
         uncheckAllMoodRadio();
         moodRadio.toggle();
     }
 
     @OnClick(neutral_button)
     void checkNeutralRadio() {
-        moodClicked = CsvEnums.Mood.NEUTRAL;
+        moodClicked = Mood.NEUTRAL;
         uncheckAllMoodRadio();
         neutralRadio.toggle();
     }
 
     @OnClick(mood_bad_button)
     void checkMoodBadRadio() {
-        moodClicked = CsvEnums.Mood.MOOD_BAD;
+        moodClicked = Mood.MOOD_BAD;
         uncheckAllMoodRadio();
         moodBadRadio.toggle();
     }
@@ -149,21 +165,21 @@ public class DayInfo extends AppCompatActivity implements ICsvHandler {
     //Buttons energy onClick
     @OnClick(min_energy_btn)
     void checkMinEnergyRadio() {
-        energyClicked = CsvEnums.Energy.LOW;
+        energyClicked = Energy.LOW;
         uncheckAllEnergyRadio();
         minEnergyRadio.toggle();
     }
 
     @OnClick(medium_energy_btn)
     void checkMediumEnergyRadio() {
-        energyClicked = CsvEnums.Energy.MID;
+        energyClicked = Energy.MID;
         uncheckAllEnergyRadio();
         mediumEnergyRadio.toggle();
     }
 
     @OnClick(max_energy_btn)
     void checkMaxEnergyRadio() {
-        energyClicked = CsvEnums.Energy.HIGH;
+        energyClicked = Energy.HIGH;
         uncheckAllEnergyRadio();
         maxEnergyRadio.toggle();
     }

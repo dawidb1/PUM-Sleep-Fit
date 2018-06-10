@@ -34,13 +34,10 @@ public class CheckboxesEnums {
         SMALL("mała");
 
         private String name;
-
         public String getName() {
             return name;
         }
-
         SportValues(String name) {
-
             this.name = name;
         }
     }
