@@ -203,8 +203,14 @@ public class CommonBandSync extends AppCompatActivity implements ICsvHandler {
 
     @OnClick(next_button)
     void goNext() {
-        Intent intent = new Intent(CommonBandSync.this, DayInfo.class);
-        startActivity(intent);
+        String x = startTime.getText().toString();
+        if (!startTime.getText().equals("Ustaw") && !endTime.getText().equals("Ustaw")){
+            Intent intent = new Intent(CommonBandSync.this, DayInfo.class);
+            startActivity(intent);
+        }
+        else {
+            Toast.makeText(this,"Uzupełnij czasy snu!",Toast.LENGTH_LONG).show();
+        }
     }
 
     @OnClick(setup_button)

@@ -49,7 +49,6 @@ public class PhysicalAdapter extends RecyclerView.Adapter<PhysicalAdapter.ViewHo
         holder.setSportTime(PhysicalList.get(position).getSportTime());
 
         int modulo = position%3;
-        Log.i("cokolwiek",modulo + "");
         holder.setItemColor(modulo);
     }
 

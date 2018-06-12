@@ -40,6 +40,15 @@ public class CheckboxesEnums {
         SportValues(String name) {
             this.name = name;
         }
+
+        public static SportValues fromString(String text) {
+            for (SportValues b : SportValues.values()) {
+                if (b.name.equalsIgnoreCase(text)) {
+                    return b;
+                }
+            }
+            return null;
+        }
     }
     public enum SportTime{
         HOURS2("120"),
@@ -58,6 +67,7 @@ public class CheckboxesEnums {
 
             this.name = name;
         }
+
     }
     public enum Diet {
         NORMAL("Normalna"),

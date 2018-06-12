@@ -9,9 +9,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.dawid.projectpum.DAL.Adapters.StarsAdapter;
 import com.example.dawid.projectpum.DAL.Helpers.EasyConverter;
+import com.example.dawid.projectpum.DAL.Helpers.ScoreModel;
 import com.example.dawid.projectpum.DAL.InstanceSaves.CsvEnums;
 import com.example.dawid.projectpum.DAL.InstanceSaves.CsvModel;
 import com.opencsv.CSVWriter;
@@ -28,12 +30,13 @@ import butterknife.OnClick;
 
 public class DaySummary extends AppCompatActivity {
 
-    CsvModel model = null;
-    SharedPreferences prefs = null;
+    CsvModel csvModel = null;
+    ScoreModel scoreModel = null;
+    SharedPreferences csvShared = null;
+    SharedPreferences scoreShared = null;
     String FILE_NAME = "results.csv";
 
     public int Rating;
-    static int maxRating = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,16 +47,27 @@ public class DaySummary extends AppCompatActivity {
         loadActionBar();
 
         fillModel();
-        Rating = model.ActivitiesScore%maxRating;
-        Log.i("ActivitiesScore",model.ActivitiesScore + "");
-        Log.i("Rating",Rating + "");
+        loadRating();
         loadRecycleView();
     }
     void init(){
-        prefs = getSharedPreferences("csv_model", MODE_PRIVATE);
-        model = new CsvModel();
+        csvShared = getSharedPreferences("csv_model", MODE_PRIVATE);
+        scoreShared = getSharedPreferences("scoreShared",MODE_PRIVATE);
+        csvModel = new CsvModel();
+        scoreModel = new ScoreModel();
         Rating = 0;
     }
+
+    void loadRating(){
+        scoreModel.setFullScore(scoreModel);
+        Log.i("FullScore",scoreModel.FullScore+"");
+        scoreModel.setRating(scoreModel.FullScore);
+
+        Rating = scoreModel.Rating;
+        Log.i("Rating",Rating+"");
+        ratingText.setText(Rating+"/5");
+    }
+
     void loadRecycleView(){
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -68,20 +82,23 @@ public class DaySummary extends AppCompatActivity {
     }
 
     public void fillModel(){
-        model.StartSleepString = prefs.getString("startSleep","");
-        model.EndSleepString = prefs.getString("endSleep","");
-        model.StepsString =  prefs.getString("stepsString","999");
-        model.Mood = CsvEnums.Mood.values()[prefs.getInt("mood",99)];
-        model.Energy = CsvEnums.Energy.values()[prefs.getInt("energy",99)];
-        model.Snore = prefs.getBoolean("snore",false);
-        model.Activities = prefs.getString("activities","noname");
-        model.ActivitiesScore = prefs.getInt("activitiesScore",999);
-        model.Fruits = prefs.getInt("fruits",999);
-        model.Vegetables = prefs.getInt("vegetables",999);
-        model.Coffee = prefs.getInt("coffee",999);
-        model.Tea = prefs.getInt("tea",999);
-        model.Alcohol = prefs.getInt("alcohol",999);
-        model.EnergyDrinks = prefs.getInt("energyDrinks",999);
+        csvModel.StartSleepString = csvShared.getString("startSleep","");
+        csvModel.EndSleepString = csvShared.getString("endSleep","");
+        csvModel.StepsString =  csvShared.getString("stepsString","999");
+        csvModel.Mood = CsvEnums.Mood.values()[csvShared.getInt("mood",99)];
+        csvModel.Energy = CsvEnums.Energy.values()[csvShared.getInt("energy",99)];
+        csvModel.Snore = csvShared.getBoolean("snore",false);
+        csvModel.Activities = csvShared.getString("activities","noname");
+        csvModel.Fruits = csvShared.getInt("fruits",999);
+        csvModel.Vegetables = csvShared.getInt("vegetables",999);
+        csvModel.Coffee = csvShared.getInt("coffee",999);
+        csvModel.Tea = csvShared.getInt("tea",999);
+        csvModel.Alcohol = csvShared.getInt("alcohol",999);
+        csvModel.EnergyDrinks = csvShared.getInt("energyDrinks",999);
+
+        scoreModel.ActivitiesScore = scoreShared.getInt("activitiesScore",999);
+        scoreModel.FruitAndVegetableScore = scoreShared.getInt("fruitAndVegetableScore",999);
+        scoreModel.SnoreScore = scoreShared.getInt("snoreScore",999);
     }
 
     void writeModelToCsv(){
@@ -93,25 +110,25 @@ public class DaySummary extends AppCompatActivity {
 
         List<String[]> data = new ArrayList<String[]>();
 
-        int x = prefs.getInt("steps", 0);
+        int x = csvShared.getInt("steps", 0);
 
         if (readyFile.length() == 0){
-            data.add(model.Headers);
+            data.add(csvModel.Headers);
         }
         data.add(new String[] {
-                model.StartSleepString,
-                model.EndSleepString,
-                model.StepsString,
-                model.Mood.name(),
-                model.Energy.name(),
-                EasyConverter.BoolToString(model.Snore),
-                model.Activities,
-                model.Fruits+"",
-                model.Vegetables+"",
-                model.Coffee +  "",
-                model.Tea+"",
-                model.Alcohol+"",
-                model.EnergyDrinks+""
+                csvModel.StartSleepString,
+                csvModel.EndSleepString,
+                csvModel.StepsString,
+                csvModel.Mood.name(),
+                csvModel.Energy.name(),
+                EasyConverter.BoolToString(csvModel.Snore),
+                csvModel.Activities,
+                csvModel.Fruits+"",
+                csvModel.Vegetables+"",
+                csvModel.Coffee +  "",
+                csvModel.Tea+"",
+                csvModel.Alcohol+"",
+                csvModel.EnergyDrinks+""
                 });
 
         try {
@@ -128,6 +145,8 @@ public class DaySummary extends AppCompatActivity {
         this.finishAffinity();
     }
 
+    @BindView(R.id.rating_text)
+    TextView ratingText;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     @BindView(R.id.exit_button)

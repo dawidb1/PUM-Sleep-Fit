@@ -11,22 +11,19 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.dawid.projectpum.DAL.Adapters.PhysicalAdapter;
-import com.example.dawid.projectpum.DAL.CheckboxesEnums;
+import com.example.dawid.projectpum.DAL.Helpers.ScoreModel;
 import com.example.dawid.projectpum.DAL.InstanceSaves.CsvModel;
 import com.example.dawid.projectpum.DAL.InstanceSaves.ICsvHandler;
 import com.example.dawid.projectpum.DAL.PhysicalItemVM;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.content.DialogInterface.OnClickListener;
@@ -42,18 +39,22 @@ import static com.example.dawid.projectpum.R.id.add_sport_time;
 import static com.example.dawid.projectpum.R.id.add_sport_value;
 import static com.example.dawid.projectpum.R.id.next_button;
 import static com.example.dawid.projectpum.R.id.physical_item_recycle_view;
-import static com.example.dawid.projectpum.R.layout;
 import static com.example.dawid.projectpum.R.layout.activity_phys_psych;
+import static com.example.dawid.projectpum.R.string.dialog_message;
+import static com.example.dawid.projectpum.R.string.dialog_title;
+import static com.example.dawid.projectpum.R.string.ok;
 import static java.util.EnumSet.allOf;
 
 public class PhysPsychActivity extends AppCompatActivity implements ICsvHandler {
 
     ArrayList<PhysicalItemVM> arrayList;
     public CsvModel model = null;
-    public SharedPreferences shared = null;
+    public SharedPreferences csvShared = null;
+    public SharedPreferences scoreShared = null;
     int scoreTime;
     int scoreIntensivity;
     int allScore;
+    boolean noActivityAlert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,8 @@ public class PhysPsychActivity extends AppCompatActivity implements ICsvHandler 
     }
     void init(){
         model = new CsvModel();
-        shared = getSharedPreferences("csv_model", MODE_PRIVATE);
+        csvShared = getSharedPreferences("csv_model", MODE_PRIVATE);
+        scoreShared = getSharedPreferences("scoreShared", MODE_PRIVATE);
         scoreTime = 0;
         scoreIntensivity = 0;
         allScore = 0;
@@ -95,12 +97,15 @@ public class PhysPsychActivity extends AppCompatActivity implements ICsvHandler 
             arrayList.add(item);
             RefreshRecycleView();
             SetButtonsDefaultValue();
-            allScore = scoreTime + scoreIntensivity;
+            allScore += scoreTime + scoreIntensivity;
+            Log.i("allScore",allScore+"");
+
             scoreIntensivity = 0;
             scoreTime = 0;
+            noActivityAlert = true;
         }
         else {
-            Toast.makeText(this,"Uzupełnij aktywność!",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Uzupełnij aktywność!",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -169,7 +174,9 @@ public class PhysPsychActivity extends AppCompatActivity implements ICsvHandler 
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 addSportValue.setText(enumArray[which]);
-                scoreIntensivity =  enumArray.length - which;
+                String intensivity =  enumArray[which];
+                scoreIntensivity = ScoreModel.getActivityIntenseScore(intensivity);
+                Log.i("scoreIntensivity",scoreIntensivity+"");
                 chooseSportTime();
             }
         });
@@ -196,7 +203,9 @@ public class PhysPsychActivity extends AppCompatActivity implements ICsvHandler 
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 addSportTime.setText(enumArray[which]);
-                scoreTime =  enumArray.length - which;
+                int time = Integer.parseInt(enumArray[which]);
+                scoreTime = ScoreModel.getActivityTimeScore(time);
+                Log.i("scoreTime",scoreTime+"");
             }
         });
 
@@ -209,10 +218,31 @@ public class PhysPsychActivity extends AppCompatActivity implements ICsvHandler 
 
     @OnClick(next_button)
     void goNext() {
-        fillModel();
-        saveSharedPrefFromModel();
-        Intent intent = new Intent(PhysPsychActivity.this, FruitsVegetables.class);
-        startActivity(intent);
+        if (noActivityAlert){
+            fillModel();
+            saveSharedPrefFromModel();
+            Intent intent = new Intent(PhysPsychActivity.this, FruitsVegetables.class);
+            startActivity(intent);
+        }
+        else {
+            // 1. Instantiate an AlertDialog.Builder with its constructor
+            Builder builder = new Builder(this);
+// 2. Chain together various setter methods to set the dialog characteristics
+            builder.setMessage("Pamiętaj, że możesz dodać swoje dzisiejsze aktywności :)")
+                    .setTitle("Dodaj aktywność");
+            builder.setPositiveButton(ok, new OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    noActivityAlert = true;
+                    // User clicked OK button
+                }
+            });
+
+// 3. Get the AlertDialog from create()
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+
+
     }
 
     @BindView(id.addActivity)
@@ -238,12 +268,14 @@ public class PhysPsychActivity extends AppCompatActivity implements ICsvHandler 
 
     @Override
     public void saveSharedPrefFromModel() {
-        SharedPreferences.Editor editor = shared.edit();
-        editor.putString("activities", model.Activities);
-        Log.i("model.activitiesJson",model.Activities);
-        Log.i("model.avtivityScore",model.ActivitiesScore+ "");
-        editor.putInt("activitiesScore",model.ActivitiesScore);
-        editor.apply();
+        SharedPreferences.Editor csvEditor = csvShared.edit();
+        csvEditor.putString("activities", model.Activities);
+        Log.i("csvModel.activitiesJson",model.Activities);
+        csvEditor.apply();
+
+        SharedPreferences.Editor scoreEditor = scoreShared.edit();
+        scoreEditor.putInt("activitiesScore",model.ActivitiesScore);
+        scoreEditor.apply();
     }
 
     @Override

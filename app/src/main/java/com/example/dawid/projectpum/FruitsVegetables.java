@@ -9,22 +9,16 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 
-import com.example.dawid.projectpum.DAL.Adapters.DietAdapter;
-import com.example.dawid.projectpum.DAL.Adapters.LiquidsAdapter;
 import com.example.dawid.projectpum.DAL.Adapters.LiquidsCounterAdapter;
-import com.example.dawid.projectpum.DAL.CheckboxesEnums;
+import com.example.dawid.projectpum.DAL.Helpers.ScoreModel;
 import com.example.dawid.projectpum.DAL.InstanceSaves.CsvModel;
 import com.example.dawid.projectpum.DAL.InstanceSaves.ICsvHandler;
-import com.example.dawid.projectpum.DAL.PhysicalItemVM;
 import com.shawnlin.numberpicker.NumberPicker;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.support.v7.widget.RecyclerView.LayoutManager;
@@ -33,14 +27,14 @@ import static com.example.dawid.projectpum.DAL.CheckboxesEnums.*;
 import static com.example.dawid.projectpum.R.id;
 import static com.example.dawid.projectpum.R.id.liquids_recyclerView;
 import static com.example.dawid.projectpum.R.id.next_button;
-import static com.example.dawid.projectpum.R.id.number_picker;
-import static com.example.dawid.projectpum.R.layout;
 import static com.example.dawid.projectpum.R.layout.activity_fruits_vegetables;
 
 public class FruitsVegetables extends AppCompatActivity implements ICsvHandler {
 
-    public CsvModel model = null;
-    public SharedPreferences shared = null;
+    public CsvModel csvModel = null;
+    public ScoreModel scoreModel = null;
+    public SharedPreferences csvShared = null;
+    public SharedPreferences scoreShared = null;
     ArrayList<Integer> numberpickerStates;
 
     @Override
@@ -55,8 +49,10 @@ public class FruitsVegetables extends AppCompatActivity implements ICsvHandler {
 
     }
     void init(){
-        model = new CsvModel();
-        shared = getSharedPreferences("csv_model", MODE_PRIVATE);
+        csvModel = new CsvModel();
+        scoreModel = new ScoreModel();
+        csvShared = getSharedPreferences("csv_model", MODE_PRIVATE);
+        scoreShared = getSharedPreferences("scoreShared", MODE_PRIVATE);
         numberpickerStates = new ArrayList<>();
     }
     void loadActionBar(){
@@ -91,24 +87,38 @@ public class FruitsVegetables extends AppCompatActivity implements ICsvHandler {
 
     @Override
     public void fillModel() {
-        model.Fruits = vegetablesNP.getValue();
-        model.Vegetables = vegetablesNP.getValue();
-        model.Coffee = numberpickerStates.get(Liquids.COFFEE.ordinal());
-        model.Tea = numberpickerStates.get(Liquids.TEA.ordinal());
-        model.Alcohol = numberpickerStates.get(Liquids.ALCOHOL.ordinal());
-        model.EnergyDrinks = numberpickerStates.get(Liquids.ENERGY_DRINKS.ordinal());
+        csvModel.Fruits = foodNP.getValue();
+        csvModel.Vegetables = vegetablesNP.getValue();
+        csvModel.Coffee = numberpickerStates.get(Liquids.COFFEE.ordinal());
+        csvModel.Tea = numberpickerStates.get(Liquids.TEA.ordinal());
+        csvModel.Alcohol = numberpickerStates.get(Liquids.ALCOHOL.ordinal());
+        csvModel.EnergyDrinks = numberpickerStates.get(Liquids.ENERGY_DRINKS.ordinal());
+
+        scoreModel.setFruitsScore(csvModel.Fruits);
+        scoreModel.setVegetablesScore(csvModel.Vegetables);
+        scoreModel.setCoffeeScore(csvModel.Coffee);
+        scoreModel.setTeaScore(csvModel.Tea);
+        scoreModel.setAlcoholScore(csvModel.Alcohol);
+        scoreModel.setEnergyDrinksScore(csvModel.EnergyDrinks);
+
+        scoreModel.setFruitAndVegetableScore(scoreModel);
+        Log.i("Fruits&Drinks score",scoreModel.FruitAndVegetableScore+"");
     }
 
     @Override
     public void saveSharedPrefFromModel() {
-        SharedPreferences.Editor editor = shared.edit();
-        editor.putInt("fruits", model.Fruits);
-        editor.putInt("vegetables",model.Vegetables);
-        editor.putInt("coffee",model.Coffee);
-        editor.putInt("tea",model.Tea);
-        editor.putInt("alcohol",model.Alcohol);
-        editor.putInt("energyDrinks",model.EnergyDrinks);
-        editor.apply();
+        SharedPreferences.Editor csvEditor = csvShared.edit();
+        csvEditor.putInt("fruits", csvModel.Fruits);
+        csvEditor.putInt("vegetables", csvModel.Vegetables);
+        csvEditor.putInt("coffee", csvModel.Coffee);
+        csvEditor.putInt("tea", csvModel.Tea);
+        csvEditor.putInt("alcohol", csvModel.Alcohol);
+        csvEditor.putInt("energyDrinks", csvModel.EnergyDrinks);
+        csvEditor.apply();
+
+        SharedPreferences.Editor scoreEditor = scoreShared.edit();
+        scoreEditor.putInt("fruitAndVegetableScore", scoreModel.FruitAndVegetableScore);
+        scoreEditor.apply();
     }
 
     @Override

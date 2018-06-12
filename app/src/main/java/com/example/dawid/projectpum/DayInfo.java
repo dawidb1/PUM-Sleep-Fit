@@ -8,20 +8,17 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.example.dawid.projectpum.DAL.InstanceSaves.CsvEnums;
+import com.example.dawid.projectpum.DAL.Helpers.ScoreModel;
 import com.example.dawid.projectpum.DAL.InstanceSaves.CsvModel;
 import com.example.dawid.projectpum.DAL.InstanceSaves.ICsvHandler;
 
-import java.util.ArrayList;
-
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.content.DialogInterface.OnClickListener;
@@ -42,17 +39,16 @@ import static com.example.dawid.projectpum.R.id.mood_radioButton;
 import static com.example.dawid.projectpum.R.id.neutral_button;
 import static com.example.dawid.projectpum.R.id.neutral_radioButton;
 import static com.example.dawid.projectpum.R.id.next_button;
-import static com.example.dawid.projectpum.R.layout;
 import static com.example.dawid.projectpum.R.layout.activity_day_info;
-import static com.example.dawid.projectpum.R.string;
-import static com.example.dawid.projectpum.R.string.cancel;
 import static com.example.dawid.projectpum.R.string.dialog_message;
 import static com.example.dawid.projectpum.R.string.dialog_title;
 import static com.example.dawid.projectpum.R.string.ok;
 
 public class DayInfo extends AppCompatActivity implements ICsvHandler {
-    public CsvModel model = null;
-    public SharedPreferences shared = null;
+    public CsvModel csvModel = null;
+    public ScoreModel scoreModel = null;
+    public SharedPreferences csvShared = null;
+    public SharedPreferences scoreShared = null;
 
     private Mood moodClicked;
     private Energy energyClicked;
@@ -66,8 +62,10 @@ public class DayInfo extends AppCompatActivity implements ICsvHandler {
         loadActionBar();
     }
     void init(){
-        model = new CsvModel();
-        shared = getSharedPreferences("csv_model", MODE_PRIVATE);
+        csvModel = new CsvModel();
+        scoreModel = new ScoreModel();
+        csvShared = getSharedPreferences("csv_model", MODE_PRIVATE);
+        scoreShared = getSharedPreferences("scoreShared", MODE_PRIVATE);
     }
     void loadActionBar(){
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -202,8 +200,15 @@ public class DayInfo extends AppCompatActivity implements ICsvHandler {
 
     @OnClick(next_button)
     void goNext() {
-        Intent intent = new Intent(DayInfo.this, PhysPsychActivity.class);
-        startActivity(intent);
+        boolean anyMoodRadioChecked = moodRadio.isChecked() || neutralRadio.isChecked() || moodBadRadio.isChecked();
+        boolean anyEnergyRadioChecked = minEnergyRadio.isChecked() || mediumEnergyRadio.isChecked() || maxEnergyRadio.isChecked();
+        if (anyMoodRadioChecked && anyEnergyRadioChecked){
+            Intent intent = new Intent(DayInfo.this, PhysPsychActivity.class);
+            startActivity(intent);
+        }
+        else {
+            Toast.makeText(this,"Uzupełnij pola wyboru!",Toast.LENGTH_LONG).show();
+        }
     }
     //endregion
 
@@ -221,6 +226,39 @@ public class DayInfo extends AppCompatActivity implements ICsvHandler {
     }
     //endregion
 
+    @Override
+    public void fillModel() {
+        csvModel.Mood =  moodClicked;
+        csvModel.Energy = energyClicked;
+        csvModel.Snore = snoreCheckbox.isChecked();
+
+        scoreModel.setSnoreScore(snoreCheckbox.isChecked());
+    }
+
+    @Override
+    public void saveSharedPrefFromModel() {
+        SharedPreferences.Editor csvEditor = csvShared.edit();
+        csvEditor.putInt("mood", csvModel.Mood.ordinal());
+        csvEditor.putInt("energy", csvModel.Energy.ordinal());
+        csvEditor.putInt("steps", csvModel.Steps);
+        csvEditor.putBoolean("snore", csvModel.Snore);
+        csvEditor.apply();
+
+        SharedPreferences.Editor scoreEditor = scoreShared.edit();
+        scoreEditor.putInt("snoreScore", scoreModel.SnoreScore);
+        scoreEditor.apply();
+
+        Log.i("snoreScore", scoreModel.SnoreScore+"");
+    }
+
+    @Override
+    public void saveStateFromModel(Bundle outState) {
+        outState.putInt("mood", csvModel.Mood.ordinal());
+        outState.putInt("energy",  csvModel.Energy.ordinal());
+        outState.putInt("steps", csvModel.Steps);
+        outState.putBoolean("snore", csvModel.Snore);
+    }
+    //endregion
 
     //region bind controls
     //bind mood RadioButtons
@@ -261,30 +299,4 @@ public class DayInfo extends AppCompatActivity implements ICsvHandler {
 
     @BindView(next_button)
     FloatingActionButton nextButton;
-
-    @Override
-    public void fillModel() {
-        model.Mood =  moodClicked;
-        model.Energy = energyClicked;
-        model.Snore = snoreCheckbox.isChecked();
-    }
-
-    @Override
-    public void saveSharedPrefFromModel() {
-        SharedPreferences.Editor editor = shared.edit();
-        editor.putInt("mood", model.Mood.ordinal());
-        editor.putInt("energy", model.Energy.ordinal());
-        editor.putInt("steps", model.Steps);
-        editor.putBoolean("snore",model.Snore);
-        editor.apply();
-    }
-
-    @Override
-    public void saveStateFromModel(Bundle outState) {
-        outState.putInt("mood", model.Mood.ordinal());
-        outState.putInt("energy",  model.Energy.ordinal());
-        outState.putInt("steps", model.Steps);
-        outState.putBoolean("snore",model.Snore);
-    }
-    //endregion
 }

@@ -47,7 +47,7 @@ public class Welcome extends AppCompatActivity {
         super.onResume();
         if (prefs.getBoolean("firstrun", true)) {
             // Do first run stuff here then set 'firstrun' as false
-            // using the following line to edit/commit prefs
+            // using the following line to edit/commit csvShared
             prefs.edit().putBoolean("firstrun", false).commit();
 
         } else {
